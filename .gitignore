@@ -2,6 +2,7 @@
 
 # Cosas de eclipse
 .classpath
+.project
 /.settings/
 /bin/
 
