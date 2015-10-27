@@ -1,6 +1,5 @@
 package hermes.view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,14 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JTable;
-import java.awt.Component;
-import javax.swing.Box;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings("serial")
 public class MonitorView extends JFrame {
 
 	private JPanel contentPane;
@@ -75,13 +69,13 @@ public class MonitorView extends JFrame {
 		cboContexto.setBounds(120, 64, 152, 24);
 		panelFiltros.add(cboContexto);
 		
-		JLabel label_2 = new JLabel("Niñ@");
+		JLabel label_2 = new JLabel("Nin@");
 		label_2.setBounds(26, 103, 70, 15);
 		panelFiltros.add(label_2);
 		
-		JComboBox cboNiño = new JComboBox();
-		cboNiño.setBounds(120, 100, 152, 24);
-		panelFiltros.add(cboNiño);
+		JComboBox cboNino = new JComboBox();
+		cboNino.setBounds(120, 100, 152, 24);
+		panelFiltros.add(cboNino);
 		
 		JLabel label_3 = new JLabel("Fecha/Hora");
 		label_3.setBounds(26, 131, 95, 15);
