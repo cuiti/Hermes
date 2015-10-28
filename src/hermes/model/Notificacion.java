@@ -22,6 +22,10 @@ public class Notificacion {
 		this.fecha_envio = fecha_envio;
 	}
 
+	public Notificacion() {
+		// constructor vacío por ahora
+	}
+
 	public int getId() {
 		return id;
 	}
