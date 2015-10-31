@@ -5,16 +5,12 @@ import hermes.dao.ICategoriaDAO;
 import hermes.dao.IContenidoDAO;
 import hermes.dao.IContextoDAO;
 import hermes.dao.INinoDAO;
-import hermes.db.Conexion;
 import hermes.model.Categoria;
 import hermes.model.Contenido;
 import hermes.model.Contexto;
 import hermes.model.Nino;
 
 import java.awt.EventQueue;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -277,5 +273,8 @@ public class MonitorView extends JFrame {
 		
 		inicializarComboBoxCategoria();
 		inicializarComboBoxContenido();
+		inicializarComboBoxContexto();
+		inicializarComboBoxNino();
+		
 	}
 }
