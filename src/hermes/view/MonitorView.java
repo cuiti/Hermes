@@ -1,6 +1,21 @@
 package hermes.view;
 
+import hermes.dao.FactoriaDAO;
+import hermes.dao.ICategoriaDAO;
+import hermes.dao.IContenidoDAO;
+import hermes.dao.IContextoDAO;
+import hermes.dao.INinoDAO;
+import hermes.db.Conexion;
+import hermes.model.Categoria;
+import hermes.model.Contenido;
+import hermes.model.Contexto;
+import hermes.model.Nino;
+
 import java.awt.EventQueue;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,7 +25,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
@@ -27,7 +41,10 @@ public class MonitorView extends JFrame {
 	private JTextField txtDesde;
 	private JTextField txtHasta;
 	private JTable table;
-
+	private JComboBox cboCategoria;
+	private JComboBox cboContenido;
+	private JComboBox cboContexto;
+	private JComboBox cboNino;
 	/**
 	 * Launch the application.
 	 */
@@ -43,6 +60,38 @@ public class MonitorView extends JFrame {
 			}
 		});
 	}
+	
+	public void inicializarComboBoxCategoria() {
+		ICategoriaDAO categoriaDAO = FactoriaDAO.getCategoriaDAO();
+		List<Categoria> lista;
+		lista = categoriaDAO.listarCategorias();
+		for (Categoria c: lista)
+			cboCategoria.addItem(c.getTexto());
+	}
+	
+	public void inicializarComboBoxContenido() {
+		IContenidoDAO contenidoDAO = FactoriaDAO.getContenidoDAO();
+		List<Contenido> lista;
+		lista = contenidoDAO.listarContenidos();
+		for (Contenido c: lista)
+			cboContenido.addItem(c.getTexto());
+	}
+	
+	public void inicializarComboBoxContexto() {
+		IContextoDAO contextoDAO = FactoriaDAO.getContextoDAO();
+		List<Contexto> lista;
+		lista = contextoDAO.listarContextos();
+		for (Contexto c: lista)
+			cboContexto.addItem(c.getTexto());
+	}
+	
+	public void inicializarComboBoxNino() {
+		INinoDAO ninoDAO = FactoriaDAO.getNinoDAO();
+		List<Nino> lista;
+		lista = ninoDAO.listarNinos();
+		for (Nino c: lista)
+			cboNino.addItem(c.getNombre() + " " + c.getApellido());
+	}
 
 	/**
 	 * Create the frame.
@@ -50,7 +99,7 @@ public class MonitorView extends JFrame {
 	public MonitorView() {
 		setTitle("Hermes Monitor");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1084, 654);
+		setBounds(100, 100, 1077, 654);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane); 
@@ -93,22 +142,22 @@ public class MonitorView extends JFrame {
 		JLabel label_5 = new JLabel("hasta");
 		label_5.setBounds(285, 160, 70, 15);
 		
-		JComboBox cboContenido = new JComboBox();
+		cboContenido = new JComboBox();
 		cboContenido.setBounds(120, 30, 152, 24);
 		
-		JComboBox cboContexto = new JComboBox();
+		cboContexto = new JComboBox();
 		cboContexto.setBounds(120, 62, 152, 24);
 		
-		JComboBox cboNino = new JComboBox();
+		cboNino = new JComboBox();
 		cboNino.setBounds(120, 95, 152, 24);
 		
 		JLabel label_6 = new JLabel("Etiqueta");
 		label_6.setBounds(26, 226, 70, 15);
 		
 		JLabel lblNewLabel = new JLabel("Categoria");
-		lblNewLabel.setBounds(301, 67, 47, 14);
+		lblNewLabel.setBounds(301, 67, 73, 14);
 		
-		JComboBox cboCategoria = new JComboBox();
+		cboCategoria = new JComboBox();
 		cboCategoria.setBounds(381, 62, 152, 24);
 		panelFiltros.setLayout(null);
 		panelFiltros.add(label);
@@ -225,5 +274,8 @@ public class MonitorView extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
+		
+		inicializarComboBoxCategoria();
+		inicializarComboBoxContenido();
 	}
 }
