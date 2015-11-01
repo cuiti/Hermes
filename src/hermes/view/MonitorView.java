@@ -28,6 +28,7 @@ public class MonitorView extends JFrame {
 	private JComboBox cboContexto;
 	private JComboBox cboNino;
 	private JComboBox cboEtiqueta;
+	private JComboBox cboRenombrarEtiqueta;
 	/**
 	 * Launch the application.
 	 */
@@ -80,7 +81,14 @@ public class MonitorView extends JFrame {
 		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
 		for (Etiqueta e: lista)
-			cboEtiqueta.addItem(e.getTexto() );
+			cboEtiqueta.addItem(e);
+	}
+	
+	private void inicializarComboBoxRenombrarEtiqueta() {
+		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
+		for (Etiqueta e: lista)
+			cboRenombrarEtiqueta.addItem(e);
 	}
 
 	/**
@@ -194,8 +202,9 @@ public class MonitorView extends JFrame {
 		JLabel label_10 = new JLabel("Renombrar etiqueta");
 		label_10.setBounds(23, 142, 127, 15);
 		
-		JComboBox cboRenombrarEtiqueta = new JComboBox();
+		cboRenombrarEtiqueta = new JComboBox();
 		cboRenombrarEtiqueta.setBounds(160, 137, 154, 24);
+		cboRenombrarEtiqueta.addActionListener(new ComboEditarEtiquetaListener());
 		
 		JLabel label_11 = new JLabel("Nuevo nombre");
 		label_11.setBounds(23, 178, 117, 15);
@@ -216,6 +225,8 @@ public class MonitorView extends JFrame {
 		
 		JButton btnRenombrar = new JButton("Renombrar");
 		btnRenombrar.setBounds(326, 172, 154, 25);
+		btnRenombrar.addActionListener(new BotonEditarEtiquetaListener());
+		
 		panelEtiquetas.setLayout(null);
 		panelEtiquetas.add(label_7);
 		panelEtiquetas.add(txtCrearEtiqueta);
@@ -271,11 +282,11 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxContexto();
 		inicializarComboBoxNino();
 		inicializarComboBoxEtiqueta();
+		inicializarComboBoxRenombrarEtiqueta();
 		
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String texto = txtCrearEtiqueta.getText();
@@ -286,9 +297,29 @@ public class MonitorView extends JFrame {
 				etiquetaDAO.guardarEtiqueta(etiqueta);
 				
 				inicializarComboBoxEtiqueta(); //para que aparezca el dato nuevo
-			}
-			
+			}	
 		}
-		
 	}
+	
+	private class ComboEditarEtiquetaListener implements ActionListener{	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
+		}
+	}
+	
+	private class BotonEditarEtiquetaListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String texto = txtNuevoNombre.getText();
+			if (!texto.equals("")){
+				System.out.println("click en editar etiqueta con texto not null");
+				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+				Etiqueta etiquetaNueva = new Etiqueta(texto);
+				Etiqueta etiquetaOriginal = (Etiqueta) cboRenombrarEtiqueta.getSelectedItem();
+				etiquetaDAO.renombrarEtiqueta(etiquetaOriginal, etiquetaNueva);
+			}	
+		}
+	}
+	
 }

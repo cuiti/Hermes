@@ -53,8 +53,12 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 
 	@Override
 	public boolean renombrarEtiqueta(Etiqueta etiqueta, Etiqueta nuevaEtiqueta) {
-		// TODO Auto-generated method stub
-		return false;
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "UPDATE etiqueta SET texto = '"		
+	    		+ nuevaEtiqueta.getTexto()+ "' "
+	    		+ "WHERE id = "
+	    		+ etiqueta.getId()+";";
+		return db.ejecutarABM(query);
 	}
 
 }

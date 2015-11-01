@@ -36,4 +36,8 @@ public class Etiqueta {
 		this.texto = texto;
 	}
 	
+	public String toString(){
+		return texto;
+	}
+	
 }
