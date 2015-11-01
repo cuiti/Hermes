@@ -2,7 +2,6 @@ package hermes.db;
 
 import java.sql.*;
 
-
 public class BaseDeDatos {
 
 	public BaseDeDatos() {
@@ -42,12 +41,33 @@ public class BaseDeDatos {
 			
 		try {
 			resultados = stmt.executeQuery(consulta);
+			
 		} catch (SQLException e) {
 			System.out.println("Error al ejecutar el statement");
 			e.printStackTrace();
 		}
 		
-		return resultados;
-		
+		return resultados;	
+	}
+	
+	/**
+	 * Método que realiza las inserciones en la base de datos
+	 * @param query es la consulta de insercion en SQL literal
+	 */
+	public boolean ejecutarInsercion(String query){
+		Connection conexion = this.getConnection();
+	    Statement stmt = null;
+	    
+	    try {
+	      stmt = conexion.createStatement();
+	      stmt.executeUpdate(query);
+	      stmt.close();
+	      // conexion.commit();		// java.sql.SQLException: database in auto-commit mode 
+	      conexion.close();
+	      return true;
+	    } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      return false;
+	    }
 	}
 }

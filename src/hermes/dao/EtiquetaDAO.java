@@ -27,6 +27,7 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 				);
 				lista.add(etiqueta);
 			}
+			resultados.close();
 		} catch (SQLException e) {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
@@ -36,8 +37,12 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 
 	@Override
 	public boolean guardarEtiqueta(Etiqueta etiqueta) {
-		// TODO Auto-generated method stub
-		return false;
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO etiqueta (texto) "
+	    		+ "VALUES ('"		
+	    		+ etiqueta.getTexto()
+	    		+ "');";
+		return db.ejecutarInsercion(query);
 	}
 
 	@Override

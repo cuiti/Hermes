@@ -208,6 +208,7 @@ public class MonitorView extends JFrame {
 		
 		JButton btnCrear = new JButton("Crear");
 		btnCrear.setBounds(326, 28, 154, 25);
+		btnCrear.addActionListener(new BotonCrearEtiquetaListener());
 		
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(326, 65, 154, 25);
@@ -280,7 +281,8 @@ public class MonitorView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String texto = txtCrearEtiqueta.getText();
-			if (texto!=null){
+			if (!texto.equals("")){
+				System.out.println("click en crear etiqueta con texto not null");
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiqueta = new Etiqueta(texto);
 				etiquetaDAO.guardarEtiqueta(etiqueta);
