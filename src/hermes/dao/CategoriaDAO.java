@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import hermes.db.Conexion;
+import hermes.db.BaseDeDatos;
 import hermes.model.Categoria;
 
 public class CategoriaDAO implements ICategoriaDAO {
@@ -19,14 +19,13 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 	
 	public List<Categoria> listarCategorias() {
-		Conexion database = new Conexion();
-		Connection c;
+		BaseDeDatos database = new BaseDeDatos();
 	    Statement stmt = null;
 	    ResultSet rs = null;
 	    
 	    List<Categoria> lista = new LinkedList<Categoria>();
 	    
-	    c = database.getConnection();
+	    Connection c = database.getConnection();
 	    
 	    try {
 			stmt = c.createStatement();

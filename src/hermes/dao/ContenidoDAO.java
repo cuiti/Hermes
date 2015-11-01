@@ -1,6 +1,6 @@
 package hermes.dao;
 
-import hermes.db.Conexion;
+import hermes.db.BaseDeDatos;
 import hermes.model.Contenido;
 
 import java.sql.Connection;
@@ -14,7 +14,7 @@ public class ContenidoDAO implements IContenidoDAO {
 
 	@Override
 	public List<Contenido> listarContenidos() {
-		Conexion database = new Conexion();
+		BaseDeDatos database = new BaseDeDatos();
 		Connection c;
 	    Statement stmt = null;
 	    ResultSet rs = null;

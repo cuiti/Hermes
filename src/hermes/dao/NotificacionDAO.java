@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import hermes.db.Conexion;
+import hermes.db.BaseDeDatos;
 import hermes.model.Notificacion;
 
 public class NotificacionDAO implements INotificacionDAO {
@@ -12,15 +12,11 @@ public class NotificacionDAO implements INotificacionDAO {
 	public NotificacionDAO() {
 		
 	}
-		    
-//	public static void main (String[] args){
-//		NotificacionDAO n = new NotificacionDAO();
-//		n.listarNotificaciones();
-//	}
+ 
 
 	@Override
 	public List<Notificacion> listarNotificaciones() {
-		Conexion database = new Conexion();
+		BaseDeDatos database = new BaseDeDatos();
 		Connection c;
 	    Statement stmt = null;
 	    ResultSet rs = null;
@@ -36,7 +32,13 @@ public class NotificacionDAO implements INotificacionDAO {
 			e.printStackTrace();
 		}
 	    try {
-			rs = stmt.executeQuery( "SELECT * FROM notificacion INNER JOIN contexto ON notificacion.id_contexto=contexto.id;" );
+			rs = stmt.executeQuery( "SELECT * FROM notificacion"
+					+ " INNER JOIN contexto ON notificacion.id_contexto=contexto.id"
+					+ "INNER JOIN categoria ON notificacion.id_categoria=categoria.id"
+					+ "INNER JOIN contenido ON notificacion.id_contenido=contenido.id"
+					+ "INNER JOIN nino ON notificacion.id_nino=nino.id"
+					+ "INNER JOIN notificacion_etiqueta ON notificacion.id=notificacion_etiqueta.id_notificacion"
+					+ "INNER JOIN etiqueta ON notificacion_etiqueta.id_etiqueta=etiqueta.id;" );
 		} catch (SQLException e) {
 			System.out.println("Error al ejecutar el statement");
 			e.printStackTrace();
@@ -45,18 +47,22 @@ public class NotificacionDAO implements INotificacionDAO {
 	    
 	    try {
 			while (rs.next()){
-				Notificacion noti = new Notificacion();
-				noti.setFecha_recepcion(rs.getDate("fecha_recepcion"));
-				System.out.println(noti.getFecha_recepcion());
-				//noti.setCategoria(categoria);
-				
+				Notificacion noti = new Notificacion(
+										rs.getInt("id"),
+										rs.getString("categoria.texto"),
+										rs.getString("contenido.texto"),
+										rs.getString("contexto.texto"),
+										(rs.getString("nino.nombre")+rs.getString("nino.apellido")),
+										rs.getDate("fecha_recepcion"),
+										rs.getDate("fecha_envio")
+							);
 				lista.add(noti);
 			}
 		} catch (SQLException e) {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
-	    return null;
+	    return lista;
 	}
 
 

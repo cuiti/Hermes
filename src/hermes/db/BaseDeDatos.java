@@ -2,9 +2,9 @@ package hermes.db;
 
 import java.sql.*;
 
-public class Conexion {
+public class BaseDeDatos {
 
-	public Conexion() {
+	public BaseDeDatos() {
 	}
 	
 	public Connection getConnection(){

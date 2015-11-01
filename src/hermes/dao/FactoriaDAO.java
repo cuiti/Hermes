@@ -16,4 +16,8 @@ public class FactoriaDAO {
 	public static INinoDAO getNinoDAO() {
 		return new NinoDAO();
 	}
+	
+	public static IEtiquetaDAO getEtiquetaDAO() {
+		return new EtiquetaDAO();
+	}
 }

@@ -1,30 +1,15 @@
 package hermes.view;
 
-import hermes.dao.FactoriaDAO;
-import hermes.dao.ICategoriaDAO;
-import hermes.dao.IContenidoDAO;
-import hermes.dao.IContextoDAO;
-import hermes.dao.INinoDAO;
-import hermes.model.Categoria;
-import hermes.model.Contenido;
-import hermes.model.Contexto;
-import hermes.model.Nino;
+import hermes.dao.*;
+import hermes.model.*;
 
 import java.awt.EventQueue;
 import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
@@ -41,6 +26,7 @@ public class MonitorView extends JFrame {
 	private JComboBox cboContenido;
 	private JComboBox cboContexto;
 	private JComboBox cboNino;
+	private JComboBox cboEtiqueta;
 	/**
 	 * Launch the application.
 	 */
@@ -88,6 +74,15 @@ public class MonitorView extends JFrame {
 		for (Nino c: lista)
 			cboNino.addItem(c.getNombre() + " " + c.getApellido());
 	}
+	
+	private void inicializarComboBoxEtiqueta() {
+		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+		List<Etiqueta> lista;
+		lista = etiquetaDAO.listarEtiquetas();
+		for (Etiqueta e: lista)
+			cboEtiqueta.addItem(e.getTexto() );
+		
+	}
 
 	/**
 	 * Create the frame.
@@ -120,7 +115,7 @@ public class MonitorView extends JFrame {
 		txtHasta.setBounds(285, 186, 154, 26);
 		txtHasta.setColumns(10);
 		
-		JComboBox cboEtiqueta = new JComboBox();
+		cboEtiqueta = new JComboBox();
 		cboEtiqueta.setBounds(120, 220, 152, 26);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -275,6 +270,9 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxContenido();
 		inicializarComboBoxContexto();
 		inicializarComboBoxNino();
+		inicializarComboBoxEtiqueta();
 		
 	}
+
+	
 }

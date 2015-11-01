@@ -1,6 +1,6 @@
 package hermes.dao;
 
-import hermes.db.Conexion;
+import hermes.db.BaseDeDatos;
 import hermes.model.Nino;
 
 import java.sql.Connection;
@@ -14,7 +14,7 @@ public class NinoDAO implements INinoDAO {
 
 	@Override
 	public List<Nino> listarNinos() {
-		Conexion database = new Conexion();
+		BaseDeDatos database = new BaseDeDatos();
 		Connection c;
 	    Statement stmt = null;
 	    ResultSet rs = null;
