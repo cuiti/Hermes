@@ -51,10 +51,10 @@ public class BaseDeDatos {
 	}
 	
 	/**
-	 * Método que realiza las inserciones en la base de datos
-	 * @param query es la consulta de insercion en SQL literal
+	 * Método que realiza los ABM en la base de datos
+	 * @param query es la consulta de insercion, eliminacion o update en SQL literal
 	 */
-	public boolean ejecutarInsercion(String query){
+	public boolean ejecutarABM(String query){
 		Connection conexion = this.getConnection();
 	    Statement stmt = null;
 	    

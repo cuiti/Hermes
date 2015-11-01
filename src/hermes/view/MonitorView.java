@@ -78,11 +78,9 @@ public class MonitorView extends JFrame {
 	
 	private void inicializarComboBoxEtiqueta() {
 		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
-		List<Etiqueta> lista;
-		lista = etiquetaDAO.listarEtiquetas();
+		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
 		for (Etiqueta e: lista)
 			cboEtiqueta.addItem(e.getTexto() );
-		
 	}
 
 	/**
@@ -286,6 +284,8 @@ public class MonitorView extends JFrame {
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiqueta = new Etiqueta(texto);
 				etiquetaDAO.guardarEtiqueta(etiqueta);
+				
+				inicializarComboBoxEtiqueta(); //para que aparezca el dato nuevo
 			}
 			
 		}

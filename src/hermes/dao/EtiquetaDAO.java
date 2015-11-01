@@ -42,7 +42,7 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 	    		+ "VALUES ('"		
 	    		+ etiqueta.getTexto()
 	    		+ "');";
-		return db.ejecutarInsercion(query);
+		return db.ejecutarABM(query);
 	}
 
 	@Override
