@@ -19,18 +19,18 @@ public class MonitorView extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtCrearEtiqueta;
 	private JTextField txtNuevoNombre;
-	private final JPanel panelFiltros = new JPanel();
 	private JTextField txtDesde;
 	private JTextField txtHasta;
 	private JTable table;
-	private JComboBox cboCategoria;
-	private JComboBox cboContenido;
-	private JComboBox cboContexto;
-	private JComboBox cboNino;
-	private JComboBox cboEtiqueta;
-	private JComboBox cboRenombrarEtiqueta;
-	private JComboBox cboEliminarEtiqueta;
-	private JComboBox cboAsignarEtiqueta;
+	private JComboBox<String> cboCategoria;
+	private JComboBox<String> cboContenido;
+	private JComboBox<String> cboContexto;
+	private JComboBox<String> cboNino;
+	private JComboBox<Etiqueta> cboEtiqueta;
+	private JComboBox<Etiqueta> cboRenombrarEtiqueta;
+	private JComboBox<Etiqueta> cboEliminarEtiqueta;
+	private JComboBox<Etiqueta> cboAsignarEtiqueta;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -75,8 +75,8 @@ public class MonitorView extends JFrame {
 		INinoDAO ninoDAO = FactoriaDAO.getNinoDAO();
 		List<Nino> lista;
 		lista = ninoDAO.listarNinos();
-		for (Nino c: lista)
-			cboNino.addItem(c.getNombre() + " " + c.getApellido());
+		for (Nino n: lista)
+			cboNino.addItem(n.getNombre() + " " + n.getApellido());
 	}
 	
 	/**
@@ -86,10 +86,18 @@ public class MonitorView extends JFrame {
 	private void inicializarComboBoxEtiqueta(JComboBox<Etiqueta> combo) {
 		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
+		DefaultComboBoxModel<Etiqueta> modelo = new DefaultComboBoxModel<Etiqueta>();
 		for (Etiqueta e: lista)
-			combo.addItem(e);
+			modelo.addElement(e);
+		combo.setModel(modelo);
 	}
-
+	
+	private void refrescarComboBoxEtiqueta() {
+		inicializarComboBoxEtiqueta(cboRenombrarEtiqueta);
+		inicializarComboBoxEtiqueta(cboEtiqueta);
+		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
+		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
+	}
 
 	/**
 	 * Create the frame.
@@ -102,6 +110,7 @@ public class MonitorView extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane); 
 		contentPane.setLayout(null);
+		JPanel panelFiltros = new JPanel();
 		panelFiltros.setBounds(5, 5, 551, 285);
 		contentPane.add(panelFiltros);
 		panelFiltros.setBorder(new TitledBorder(null, "Filtros", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -122,7 +131,7 @@ public class MonitorView extends JFrame {
 		txtHasta.setBounds(285, 186, 154, 26);
 		txtHasta.setColumns(10);
 		
-		cboEtiqueta = new JComboBox();
+		cboEtiqueta = new JComboBox<Etiqueta>();
 		cboEtiqueta.setBounds(120, 220, 152, 26);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -140,13 +149,13 @@ public class MonitorView extends JFrame {
 		JLabel label_5 = new JLabel("hasta");
 		label_5.setBounds(285, 160, 70, 15);
 		
-		cboContenido = new JComboBox();
+		cboContenido = new JComboBox<String>();
 		cboContenido.setBounds(120, 30, 152, 24);
 		
-		cboContexto = new JComboBox();
+		cboContexto = new JComboBox<String>();
 		cboContexto.setBounds(120, 62, 152, 24);
 		
-		cboNino = new JComboBox();
+		cboNino = new JComboBox<String>();
 		cboNino.setBounds(120, 95, 152, 24);
 		
 		JLabel label_6 = new JLabel("Etiqueta");
@@ -155,7 +164,7 @@ public class MonitorView extends JFrame {
 		JLabel lblNewLabel = new JLabel("Categoria");
 		lblNewLabel.setBounds(301, 67, 73, 14);
 		
-		cboCategoria = new JComboBox();
+		cboCategoria = new JComboBox<String>();
 		cboCategoria.setBounds(381, 62, 152, 24);
 		panelFiltros.setLayout(null);
 		panelFiltros.add(label);
@@ -190,19 +199,19 @@ public class MonitorView extends JFrame {
 		JLabel label_8 = new JLabel("Eliminar etiqueta");
 		label_8.setBounds(23, 70, 127, 15);
 		
-		cboEliminarEtiqueta = new JComboBox();
+		cboEliminarEtiqueta = new JComboBox<Etiqueta>();
 		cboEliminarEtiqueta.setBounds(160, 65, 154, 24);
 		
 		JLabel label_9 = new JLabel("Asignar etiqueta");
 		label_9.setBounds(23, 106, 127, 15);
 		
-		cboAsignarEtiqueta = new JComboBox();
+		cboAsignarEtiqueta = new JComboBox<Etiqueta>();
 		cboAsignarEtiqueta.setBounds(160, 101, 154, 24);
 		
 		JLabel label_10 = new JLabel("Renombrar etiqueta");
 		label_10.setBounds(23, 142, 127, 15);
 		
-		cboRenombrarEtiqueta = new JComboBox();
+		cboRenombrarEtiqueta = new JComboBox<Etiqueta>();
 		cboRenombrarEtiqueta.setBounds(160, 137, 154, 24);
 		cboRenombrarEtiqueta.addActionListener(new ComboEditarEtiquetaListener());
 		
@@ -282,11 +291,8 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxContenido();
 		inicializarComboBoxContexto();
 		inicializarComboBoxNino();
-		inicializarComboBoxEtiqueta(cboRenombrarEtiqueta);
-		inicializarComboBoxEtiqueta(cboEtiqueta);
-		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
-		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
 		
+		refrescarComboBoxEtiqueta();
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{
@@ -297,6 +303,8 @@ public class MonitorView extends JFrame {
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiqueta = new Etiqueta(texto);
 				etiquetaDAO.guardarEtiqueta(etiqueta);
+				refrescarComboBoxEtiqueta();
+				txtCrearEtiqueta.setText("");
 			}	
 		}
 	}
@@ -317,6 +325,7 @@ public class MonitorView extends JFrame {
 				Etiqueta etiquetaNueva = new Etiqueta(texto);
 				Etiqueta etiquetaOriginal = (Etiqueta) cboRenombrarEtiqueta.getSelectedItem();
 				etiquetaDAO.renombrarEtiqueta(etiquetaOriginal, etiquetaNueva);
+				refrescarComboBoxEtiqueta();
 			}	
 		}
 	}
@@ -330,6 +339,7 @@ public class MonitorView extends JFrame {
 			if (respuesta==JOptionPane.YES_OPTION){
 				Etiqueta etiqueta = (Etiqueta) cboEliminarEtiqueta.getSelectedItem();
 				FactoriaDAO.getEtiquetaDAO().eliminarEtiqueta(etiqueta);
+				refrescarComboBoxEtiqueta();
 			}	
 		}		
 	}

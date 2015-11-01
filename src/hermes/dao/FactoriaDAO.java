@@ -20,4 +20,8 @@ public class FactoriaDAO {
 	public static IEtiquetaDAO getEtiquetaDAO() {
 		return new EtiquetaDAO();
 	}
+	
+	public static INotificacionDAO getNotificacionDAO() {
+		return new NotificacionDAO();
+	}
 }
