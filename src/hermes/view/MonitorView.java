@@ -29,6 +29,8 @@ public class MonitorView extends JFrame {
 	private JComboBox cboNino;
 	private JComboBox cboEtiqueta;
 	private JComboBox cboRenombrarEtiqueta;
+	private JComboBox cboEliminarEtiqueta;
+	private JComboBox cboAsignarEtiqueta;
 	/**
 	 * Launch the application.
 	 */
@@ -77,19 +79,17 @@ public class MonitorView extends JFrame {
 			cboNino.addItem(c.getNombre() + " " + c.getApellido());
 	}
 	
-	private void inicializarComboBoxEtiqueta() {
+	/**
+	 * Obtiene todas las etiquetas de la base de datos y las agrega al JComboBox
+	 * @param combo el JComboBox que va a ser rellenado
+	 */
+	private void inicializarComboBoxEtiqueta(JComboBox<Etiqueta> combo) {
 		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
 		for (Etiqueta e: lista)
-			cboEtiqueta.addItem(e);
+			combo.addItem(e);
 	}
-	
-	private void inicializarComboBoxRenombrarEtiqueta() {
-		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
-		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
-		for (Etiqueta e: lista)
-			cboRenombrarEtiqueta.addItem(e);
-	}
+
 
 	/**
 	 * Create the frame.
@@ -190,13 +190,13 @@ public class MonitorView extends JFrame {
 		JLabel label_8 = new JLabel("Eliminar etiqueta");
 		label_8.setBounds(23, 70, 127, 15);
 		
-		JComboBox cboEliminarEtiqueta = new JComboBox();
+		cboEliminarEtiqueta = new JComboBox();
 		cboEliminarEtiqueta.setBounds(160, 65, 154, 24);
 		
 		JLabel label_9 = new JLabel("Asignar etiqueta");
 		label_9.setBounds(23, 106, 127, 15);
 		
-		JComboBox cboAsignarEtiqueta = new JComboBox();
+		cboAsignarEtiqueta = new JComboBox();
 		cboAsignarEtiqueta.setBounds(160, 101, 154, 24);
 		
 		JLabel label_10 = new JLabel("Renombrar etiqueta");
@@ -219,6 +219,7 @@ public class MonitorView extends JFrame {
 		
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(326, 65, 154, 25);
+		btnEliminar.addActionListener(new BotonEliminarEtiquetaListener());
 		
 		JButton btnAsignardesasig = new JButton("Asignar/Desasig.");
 		btnAsignardesasig.setBounds(326, 101, 154, 25);
@@ -281,8 +282,10 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxContenido();
 		inicializarComboBoxContexto();
 		inicializarComboBoxNino();
-		inicializarComboBoxEtiqueta();
-		inicializarComboBoxRenombrarEtiqueta();
+		inicializarComboBoxEtiqueta(cboRenombrarEtiqueta);
+		inicializarComboBoxEtiqueta(cboEtiqueta);
+		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
+		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
 		
 	}
 
@@ -295,8 +298,6 @@ public class MonitorView extends JFrame {
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiqueta = new Etiqueta(texto);
 				etiquetaDAO.guardarEtiqueta(etiqueta);
-				
-				inicializarComboBoxEtiqueta(); //para que aparezca el dato nuevo
 			}	
 		}
 	}
@@ -320,6 +321,22 @@ public class MonitorView extends JFrame {
 				etiquetaDAO.renombrarEtiqueta(etiquetaOriginal, etiquetaNueva);
 			}	
 		}
+	}
+	
+	private class BotonEliminarEtiquetaListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("click en eliminar etiqueta");
+			int respuesta = JOptionPane.showConfirmDialog(null, "¿Eliminar etiqueta? Esta acción es definitiva");
+			
+			if (respuesta==JOptionPane.YES_OPTION){
+				Etiqueta etiqueta = (Etiqueta) cboEliminarEtiqueta.getSelectedItem();
+				FactoriaDAO.getEtiquetaDAO().eliminarEtiqueta(etiqueta);
+			}
+			
+		}
+		
 	}
 	
 }

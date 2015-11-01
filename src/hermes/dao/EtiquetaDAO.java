@@ -47,8 +47,11 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 
 	@Override
 	public boolean eliminarEtiqueta(Etiqueta etiqueta) {
-		// TODO Auto-generated method stub
-		return false;
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "DELETE FROM etiqueta WHERE id = "		
+	    		+ etiqueta.getId()
+	    		+";";
+		return db.ejecutarABM(query);
 	}
 
 	@Override
