@@ -1,46 +1,29 @@
 package hermes.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
 import hermes.db.BaseDeDatos;
-import hermes.model.Categoria;
 import hermes.model.Etiqueta;
 
 public class EtiquetaDAO implements IEtiquetaDAO {
 
 	@Override
 	public List<Etiqueta> listarEtiquetas() {
-		BaseDeDatos database = new BaseDeDatos();
-	    Statement stmt = null;
-	    ResultSet rs = null;
-	    
+		BaseDeDatos db = new BaseDeDatos();
+	    ResultSet resultados; 
 	    List<Etiqueta> lista = new LinkedList<Etiqueta>();
 	    
-	    Connection c = database.getConnection();
+	    String consulta = "SELECT * FROM etiqueta";
+	    
+	    resultados = db.ejecutarConsulta(consulta);
 	    
 	    try {
-			stmt = c.createStatement();
-		} catch (SQLException e) {
-			System.out.println("Error al crear el statement");
-			e.printStackTrace();
-		}
-	    try {
-			rs = stmt.executeQuery("SELECT * FROM etiqueta");
-		} catch (SQLException e) {
-			System.out.println("Error al ejecutar el statement");
-			e.printStackTrace();
-		}
-	    
-	    try {
-			while (rs.next()){
+			while (resultados.next()){
 				Etiqueta etiqueta = new Etiqueta(
-						rs.getInt("id"),
-						rs.getString("texto")
+						resultados.getInt("id"),
+						resultados.getString("texto")
 				);
 				lista.add(etiqueta);
 			}

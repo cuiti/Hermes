@@ -3,7 +3,6 @@ package hermes.view;
 import hermes.dao.*;
 import hermes.model.*;
 
-import java.awt.EventQueue;
 import java.util.List;
 
 import javax.swing.*;
@@ -11,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class MonitorView extends JFrame {
@@ -274,5 +275,18 @@ public class MonitorView extends JFrame {
 		
 	}
 
-	
+	private class BotonCrearEtiquetaListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String texto = txtCrearEtiqueta.getText();
+			if (texto!=null){
+				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+				Etiqueta etiqueta = new Etiqueta(texto);
+				etiquetaDAO.guardarEtiqueta(etiqueta);
+			}
+			
+		}
+		
+	}
 }

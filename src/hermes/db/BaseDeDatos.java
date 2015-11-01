@@ -2,6 +2,7 @@ package hermes.db;
 
 import java.sql.*;
 
+
 public class BaseDeDatos {
 
 	public BaseDeDatos() {
@@ -19,6 +20,34 @@ public class BaseDeDatos {
 		 }
 		 
 		return c;
+		
+	}
+	
+	/**
+	 * Hace todo lo necesario para acceder a la db, conexion, statement y consulta
+	 * @param consulta el string con la consulta literal en SQL
+	 * @return un ResultSet con todos los resultados
+	 */
+	public ResultSet ejecutarConsulta(String consulta){
+		Connection conexion = this.getConnection();
+		Statement stmt=null;
+		ResultSet resultados=null;
+		
+		try {
+			stmt = conexion.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al crear el statement");
+			e.printStackTrace();
+		}
+			
+		try {
+			resultados = stmt.executeQuery(consulta);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar el statement");
+			e.printStackTrace();
+		}
+		
+		return resultados;
 		
 	}
 }
