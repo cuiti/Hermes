@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hermes.db.BaseDeDatos;
-import hermes.model.Notificacion;
+import hermes.model.*;
 
 public class NotificacionDAO implements INotificacionDAO {
 
@@ -49,10 +49,10 @@ public class NotificacionDAO implements INotificacionDAO {
 			while (rs.next()){
 				Notificacion noti = new Notificacion(
 										rs.getInt("id"),
-										rs.getString("categoria.texto"),
-										rs.getString("contenido.texto"),
-										rs.getString("contexto.texto"),
-										(rs.getString("nino.nombre")+rs.getString("nino.apellido")),
+										new Categoria (rs.getInt("categoria.id"),rs.getString("categoria.texto")),
+										new Contenido(rs.getInt("contenido.id"),rs.getString("contenido.texto")),
+										new Contexto(rs.getInt("contexto.id"),rs.getString("contexto.texto")),
+										new Nino(rs.getInt("nino.id"),rs.getString("nino.nombre"),rs.getString("nino.apellido")),
 										rs.getDate("fecha_recepcion"),
 										rs.getDate("fecha_envio")
 							);

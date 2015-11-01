@@ -4,20 +4,23 @@ import java.util.Date;
 
 public class Notificacion {
 	private int id;
-	private String categoria;
-	private String contenido;
-	private String contexto;
-	private String nombre;
+	private Categoria categoria;
+	private Contenido contenido;
+	private Contexto contexto;
+	private Nino nino;
 	private Date fecha_recepcion;
 	private Date fecha_envio;
 	
-	public Notificacion(int id, String categoria, String contenido, String contexto, String nombre,
+
+
+	public Notificacion(int id, Categoria categoria, Contenido contenido, Contexto contexto, Nino nino,
 			Date fecha_recepcion, Date fecha_envio) {
+		super();
 		this.id = id;
 		this.categoria = categoria;
 		this.contenido = contenido;
 		this.contexto = contexto;
-		this.nombre = nombre;
+		this.nino = nino;
 		this.fecha_recepcion = fecha_recepcion;
 		this.fecha_envio = fecha_envio;
 	}
@@ -34,36 +37,36 @@ public class Notificacion {
 		this.id = id;
 	}
 
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
 
-	public String getContenido() {
+	public Contenido getContenido() {
 		return contenido;
 	}
 
-	public void setContenido(String contenido) {
+	public void setContenido(Contenido contenido) {
 		this.contenido = contenido;
 	}
 
-	public String getContexto() {
+	public Contexto getContexto() {
 		return contexto;
 	}
 
-	public void setContexto(String contexto) {
+	public void setContexto(Contexto contexto) {
 		this.contexto = contexto;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public Nino getNino(){
+		return nino;
 	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	
+	public void setNino(Nino nino) {
+		this.nino = nino;
 	}
 
 	public Date getFecha_recepcion() {
@@ -81,8 +84,6 @@ public class Notificacion {
 	public void setFecha_envio(Date fecha_envio) {
 		this.fecha_envio = fecha_envio;
 	}
-	
-
 
 
 }

@@ -294,7 +294,6 @@ public class MonitorView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String texto = txtCrearEtiqueta.getText();
 			if (!texto.equals("")){
-				System.out.println("click en crear etiqueta con texto not null");
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiqueta = new Etiqueta(texto);
 				etiquetaDAO.guardarEtiqueta(etiqueta);
@@ -314,7 +313,6 @@ public class MonitorView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String texto = txtNuevoNombre.getText();
 			if (!texto.equals("")){
-				System.out.println("click en editar etiqueta con texto not null");
 				IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 				Etiqueta etiquetaNueva = new Etiqueta(texto);
 				Etiqueta etiquetaOriginal = (Etiqueta) cboRenombrarEtiqueta.getSelectedItem();
@@ -327,16 +325,13 @@ public class MonitorView extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("click en eliminar etiqueta");
 			int respuesta = JOptionPane.showConfirmDialog(null, "¿Eliminar etiqueta? Esta acción es definitiva");
 			
 			if (respuesta==JOptionPane.YES_OPTION){
 				Etiqueta etiqueta = (Etiqueta) cboEliminarEtiqueta.getSelectedItem();
 				FactoriaDAO.getEtiquetaDAO().eliminarEtiqueta(etiqueta);
-			}
-			
-		}
-		
+			}	
+		}		
 	}
 	
 }
