@@ -1,20 +1,18 @@
 package hermes.model;
 
-import java.util.Date;
-
 public class Notificacion {
 	private int id;
 	private Categoria categoria;
 	private Contenido contenido;
 	private Contexto contexto;
 	private Nino nino;
-	private Date fecha_recepcion;
-	private Date fecha_envio;
+	private String fecha_recepcion;
+	private String fecha_envio;
 	
 
 
 	public Notificacion(int id, Categoria categoria, Contenido contenido, Contexto contexto, Nino nino,
-			Date fecha_recepcion, Date fecha_envio) {
+			String fecha_recepcion, String fecha_envio) {
 		super();
 		this.id = id;
 		this.categoria = categoria;
@@ -69,19 +67,19 @@ public class Notificacion {
 		this.nino = nino;
 	}
 
-	public Date getFecha_recepcion() {
+	public String getFecha_recepcion() {
 		return fecha_recepcion;
 	}
 
-	public void setFecha_recepcion(Date fecha_recepcion) {
+	public void setFecha_recepcion(String fecha_recepcion) {
 		this.fecha_recepcion = fecha_recepcion;
 	}
 
-	public Date getFecha_envio() {
+	public String getFecha_envio() {
 		return fecha_envio;
 	}
 
-	public void setFecha_envio(Date fecha_envio) {
+	public void setFecha_envio(String fecha_envio) {
 		this.fecha_envio = fecha_envio;
 	}
 

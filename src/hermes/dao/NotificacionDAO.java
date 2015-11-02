@@ -32,12 +32,19 @@ public class NotificacionDAO implements INotificacionDAO {
 			e.printStackTrace();
 		}
 	    try {
-			rs = stmt.executeQuery( "SELECT * FROM notificacion"
-					+ " INNER JOIN contexto ON notificacion.id_contexto=contexto.id"
-					+ "INNER JOIN categoria ON notificacion.id_categoria=categoria.id"
-					+ "INNER JOIN contenido ON notificacion.id_contenido=contenido.id"
-					+ "INNER JOIN nino ON notificacion.id_nino=nino.id"
-					+ "INNER JOIN notificacion_etiqueta ON notificacion.id=notificacion_etiqueta.id_notificacion"
+			rs = stmt.executeQuery( "SELECT notificacion.id, "
+					+ "notificacion.fecha_envio, notificacion.fecha_recepcion, "
+					+ "notificacion.id_contexto, contexto.texto AS contexto, "
+					+ "notificacion.id_contenido, contenido.texto AS contenido, "
+					+ "notificacion.id_categoria, categoria.texto AS categoria, "
+					+ "notificacion.id_nino, nino.nombre, nino.apellido, "
+					+ "etiqueta.texto AS etiqueta "
+					+ "FROM notificacion "
+					+ "INNER JOIN contexto ON notificacion.id_contexto=contexto.id "
+					+ "INNER JOIN categoria ON notificacion.id_categoria=categoria.id "
+					+ "INNER JOIN contenido ON notificacion.id_contenido=contenido.id "
+					+ "INNER JOIN nino ON notificacion.id_nino=nino.id "
+					+ "INNER JOIN notificacion_etiqueta ON notificacion.id=notificacion_etiqueta.id_notificacion "
 					+ "INNER JOIN etiqueta ON notificacion_etiqueta.id_etiqueta=etiqueta.id;" );
 		} catch (SQLException e) {
 			System.out.println("Error al ejecutar el statement");
@@ -49,12 +56,12 @@ public class NotificacionDAO implements INotificacionDAO {
 			while (rs.next()){
 				Notificacion noti = new Notificacion(
 										rs.getInt("id"),
-										new Categoria (rs.getInt("categoria.id"),rs.getString("categoria.texto")),
-										new Contenido(rs.getInt("contenido.id"),rs.getString("contenido.texto")),
-										new Contexto(rs.getInt("contexto.id"),rs.getString("contexto.texto")),
-										new Nino(rs.getInt("nino.id"),rs.getString("nino.nombre"),rs.getString("nino.apellido")),
-										rs.getDate("fecha_recepcion"),
-										rs.getDate("fecha_envio")
+										new Categoria (rs.getInt("id_categoria"),rs.getString("categoria")),
+										new Contenido(rs.getInt("id_contenido"),rs.getString("contenido")),
+										new Contexto(rs.getInt("id_contexto"),rs.getString("contexto")),
+										new Nino(rs.getInt("id_nino"),rs.getString("nombre"),rs.getString("apellido")),
+										rs.getString("fecha_recepcion"),
+										rs.getString("fecha_envio")
 							);
 				lista.add(noti);
 			}

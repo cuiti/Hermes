@@ -10,8 +10,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 import java.awt.event.*;
+import com.toedter.calendar.JDateChooser;
 
 @SuppressWarnings("serial")
 public class MonitorView extends JFrame {
@@ -19,8 +22,6 @@ public class MonitorView extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtCrearEtiqueta;
 	private JTextField txtNuevoNombre;
-	private JTextField txtDesde;
-	private JTextField txtHasta;
 	private JTable table;
 	private JComboBox<Categoria> cboCategoria;
 	private JComboBox<Contenido> cboContenido;
@@ -30,6 +31,7 @@ public class MonitorView extends JFrame {
 	private JComboBox<Etiqueta> cboRenombrarEtiqueta;
 	private JComboBox<Etiqueta> cboEliminarEtiqueta;
 	private JComboBox<Etiqueta> cboAsignarEtiqueta;
+	private DefaultTableModel modeloTabla;
 	
 	/**
 	 * Launch the application.
@@ -98,6 +100,24 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
 		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
 	}
+	
+	public void rellenarTabla() {
+		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
+			
+		System.out.println(lista.size());
+	    for (Notificacion n: lista) {
+	    	Object[] fila = new Object[5];
+	    	
+	    	fila[0] = n.getFecha_envio().toString();
+	    	fila[1] = n.getContenido().toString();
+	    	fila[2] = n.getContexto().toString();
+	    	fila[3] = n.getCategoria().toString();
+	    	fila[4] = n.getNino().toString();
+		
+	    	modeloTabla.addRow(fila);
+	    }
+	}
 
 	/**
 	 * Create the frame.
@@ -105,7 +125,7 @@ public class MonitorView extends JFrame {
 	public MonitorView() {
 		setTitle("Hermes Monitor");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1077, 654);
+		setBounds(100, 100, 1085, 654);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane); 
@@ -121,16 +141,6 @@ public class MonitorView extends JFrame {
 		JLabel label_1 = new JLabel("Contexto");
 		label_1.setBounds(26, 60, 70, 29);
 		
-		txtDesde = new JTextField();
-		txtDesde.setEnabled(false);
-		txtDesde.setBounds(118, 186, 154, 26);
-		txtDesde.setColumns(10);
-		
-		txtHasta = new JTextField();
-		txtHasta.setEnabled(false);
-		txtHasta.setBounds(285, 186, 154, 26);
-		txtHasta.setColumns(10);
-		
 		cboEtiqueta = new JComboBox<Etiqueta>();
 		cboEtiqueta.setBounds(120, 220, 152, 26);
 		
@@ -144,7 +154,7 @@ public class MonitorView extends JFrame {
 		label_3.setBounds(26, 140, 95, 15);
 		
 		JLabel label_4 = new JLabel("desde");
-		label_4.setBounds(118, 160, 70, 15);
+		label_4.setBounds(120, 160, 70, 15);
 		
 		JLabel label_5 = new JLabel("hasta");
 		label_5.setBounds(285, 160, 70, 15);
@@ -176,13 +186,19 @@ public class MonitorView extends JFrame {
 		panelFiltros.add(label_2);
 		panelFiltros.add(cboNino);
 		panelFiltros.add(label_3);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(120, 183, 152, 26);
+		panelFiltros.add(dateChooser);
 		panelFiltros.add(label_4);
 		panelFiltros.add(label_5);
-		panelFiltros.add(txtDesde);
-		panelFiltros.add(txtHasta);
 		panelFiltros.add(label_6);
 		panelFiltros.add(cboEtiqueta);
 		panelFiltros.add(btnFiltrar);
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(282, 183, 152, 26);
+		panelFiltros.add(dateChooser_1);
 		
 		JPanel panelEtiquetas = new JPanel();
 		panelEtiquetas.setBounds(567, 5, 495, 285);
@@ -271,18 +287,29 @@ public class MonitorView extends JFrame {
 			gl_panelNotificaciones.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelNotificaciones.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		table.setEnabled(false);
+		modeloTabla = new DefaultTableModel(new Object[][] {
+		},
+		new String[] {
+			"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas"
+		}
+		);
+		table.setModel(modeloTabla);
+/*		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
 				"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiqueta"
 			}
-		));
+		));*/
+		rellenarTabla();
+		TableRowSorter sorter = new TableRowSorter(modeloTabla);
+		table.setRowSorter(sorter);
 		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
@@ -344,5 +371,4 @@ public class MonitorView extends JFrame {
 			}	
 		}		
 	}
-	
 }
