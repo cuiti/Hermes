@@ -326,6 +326,7 @@ public class MonitorView extends JFrame {
 				Etiqueta etiquetaOriginal = (Etiqueta) cboRenombrarEtiqueta.getSelectedItem();
 				etiquetaDAO.renombrarEtiqueta(etiquetaOriginal, etiquetaNueva);
 				refrescarComboBoxEtiqueta();
+				txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
 			}	
 		}
 	}
