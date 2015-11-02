@@ -25,4 +25,8 @@ public class Contexto {
 		this.texto = texto;
 	}
 	
+	public String toString() {
+		return texto;
+	}
+	
 }

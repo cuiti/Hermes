@@ -22,10 +22,10 @@ public class MonitorView extends JFrame {
 	private JTextField txtDesde;
 	private JTextField txtHasta;
 	private JTable table;
-	private JComboBox<String> cboCategoria;
-	private JComboBox<String> cboContenido;
-	private JComboBox<String> cboContexto;
-	private JComboBox<String> cboNino;
+	private JComboBox<Categoria> cboCategoria;
+	private JComboBox<Contenido> cboContenido;
+	private JComboBox<Contexto> cboContexto;
+	private JComboBox<Nino> cboNino;
 	private JComboBox<Etiqueta> cboEtiqueta;
 	private JComboBox<Etiqueta> cboRenombrarEtiqueta;
 	private JComboBox<Etiqueta> cboEliminarEtiqueta;
@@ -52,7 +52,7 @@ public class MonitorView extends JFrame {
 		List<Categoria> lista;
 		lista = categoriaDAO.listarCategorias();
 		for (Categoria c: lista)
-			cboCategoria.addItem(c.getTexto());
+			cboCategoria.addItem(c);
 	}
 	
 	public void inicializarComboBoxContenido() {
@@ -60,7 +60,7 @@ public class MonitorView extends JFrame {
 		List<Contenido> lista;
 		lista = contenidoDAO.listarContenidos();
 		for (Contenido c: lista)
-			cboContenido.addItem(c.getTexto());
+			cboContenido.addItem(c);
 	}
 	
 	public void inicializarComboBoxContexto() {
@@ -68,7 +68,7 @@ public class MonitorView extends JFrame {
 		List<Contexto> lista;
 		lista = contextoDAO.listarContextos();
 		for (Contexto c: lista)
-			cboContexto.addItem(c.getTexto());
+			cboContexto.addItem(c);
 	}
 	
 	public void inicializarComboBoxNino() {
@@ -76,7 +76,7 @@ public class MonitorView extends JFrame {
 		List<Nino> lista;
 		lista = ninoDAO.listarNinos();
 		for (Nino n: lista)
-			cboNino.addItem(n.getNombre() + " " + n.getApellido());
+			cboNino.addItem(n);
 	}
 	
 	/**
@@ -149,13 +149,13 @@ public class MonitorView extends JFrame {
 		JLabel label_5 = new JLabel("hasta");
 		label_5.setBounds(285, 160, 70, 15);
 		
-		cboContenido = new JComboBox<String>();
+		cboContenido = new JComboBox<Contenido>();
 		cboContenido.setBounds(120, 30, 152, 24);
 		
-		cboContexto = new JComboBox<String>();
+		cboContexto = new JComboBox<Contexto>();
 		cboContexto.setBounds(120, 62, 152, 24);
 		
-		cboNino = new JComboBox<String>();
+		cboNino = new JComboBox<Nino>();
 		cboNino.setBounds(120, 95, 152, 24);
 		
 		JLabel label_6 = new JLabel("Etiqueta");
@@ -164,7 +164,7 @@ public class MonitorView extends JFrame {
 		JLabel lblNewLabel = new JLabel("Categoria");
 		lblNewLabel.setBounds(301, 67, 73, 14);
 		
-		cboCategoria = new JComboBox<String>();
+		cboCategoria = new JComboBox<Categoria>();
 		cboCategoria.setBounds(381, 62, 152, 24);
 		panelFiltros.setLayout(null);
 		panelFiltros.add(label);

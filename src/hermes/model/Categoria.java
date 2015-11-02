@@ -26,4 +26,8 @@ public class Categoria {
 		this.texto = texto;
 	}
 	
+	public String toString() {
+		return texto;
+	}
+	
 }
