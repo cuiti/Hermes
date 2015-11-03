@@ -1,5 +1,7 @@
 package hermes.model;
 
+import java.util.List;
+
 public class Notificacion {
 	private int id;
 	private Categoria categoria;
@@ -8,11 +10,10 @@ public class Notificacion {
 	private Nino nino;
 	private String fecha_recepcion;
 	private String fecha_envio;
-	
-
+	private List<Etiqueta> etiquetas;
 
 	public Notificacion(int id, Categoria categoria, Contenido contenido, Contexto contexto, Nino nino,
-			String fecha_recepcion, String fecha_envio) {
+			String fecha_recepcion, String fecha_envio, List<Etiqueta> etiquetas) {
 		super();
 		this.id = id;
 		this.categoria = categoria;
@@ -21,10 +22,7 @@ public class Notificacion {
 		this.nino = nino;
 		this.fecha_recepcion = fecha_recepcion;
 		this.fecha_envio = fecha_envio;
-	}
-
-	public Notificacion() {
-		// constructor vacío por ahora
+		this.etiquetas = etiquetas;
 	}
 
 	public int getId() {
@@ -83,5 +81,19 @@ public class Notificacion {
 		this.fecha_envio = fecha_envio;
 	}
 
+	public List<Etiqueta> getEtiquetas() {
+		return etiquetas;
+	}
+
+	public void setEtiquetas(List<Etiqueta> etiquetas) {
+		this.etiquetas = etiquetas;
+	}
+	
+	public String getEtiquetasComoString() {
+		String etiquetas = "";
+		for (Etiqueta e : this.etiquetas)
+			etiquetas = etiquetas + e.getTexto() + " ";
+		return etiquetas;
+	}
 
 }

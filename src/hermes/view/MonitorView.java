@@ -107,13 +107,14 @@ public class MonitorView extends JFrame {
 			
 		System.out.println(lista.size());
 	    for (Notificacion n: lista) {
-	    	Object[] fila = new Object[5];
+	    	Object[] fila = new Object[6];
 	    	
-	    	fila[0] = n.getFecha_envio().toString();
-	    	fila[1] = n.getContenido().toString();
-	    	fila[2] = n.getContexto().toString();
-	    	fila[3] = n.getCategoria().toString();
-	    	fila[4] = n.getNino().toString();
+	    	fila[0] = n.getFecha_envio();
+	    	fila[1] = n.getContenido();
+	    	fila[2] = n.getContexto();
+	    	fila[3] = n.getCategoria();
+	    	fila[4] = n.getNino();
+	    	fila[5] = n.getEtiquetasComoString();
 		
 	    	modeloTabla.addRow(fila);
 	    }
@@ -293,20 +294,14 @@ public class MonitorView extends JFrame {
 		
 		table = new JTable();
 		table.setEnabled(false);
-		modeloTabla = new DefaultTableModel(new Object[][] {
-		},
-		new String[] {
-			"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas"
-		}
-		);
-		table.setModel(modeloTabla);
-/*		table.setModel(new DefaultTableModel(
+		modeloTabla = new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiqueta"
+					"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas"
 			}
-		));*/
+		);
+		table.setModel(modeloTabla);
 		rellenarTabla();
 		TableRowSorter sorter = new TableRowSorter(modeloTabla);
 		table.setRowSorter(sorter);
