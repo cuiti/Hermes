@@ -3,10 +3,8 @@ package hermes.dao;
 import hermes.db.BaseDeDatos;
 import hermes.model.Nino;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,27 +12,13 @@ public class NinoDAO implements INinoDAO {
 
 	@Override
 	public List<Nino> listarNinos() {
-		BaseDeDatos database = new BaseDeDatos();
-		Connection c;
-	    Statement stmt = null;
+		BaseDeDatos db = new BaseDeDatos();
 	    ResultSet rs = null;
-	    
 	    List<Nino> lista = new LinkedList<Nino>();
 	    
-	    c = database.getConnection();
-	    
-	    try {
-			stmt = c.createStatement();
-		} catch (SQLException e) {
-			System.out.println("Error al crear el statement");
-			e.printStackTrace();
-		}
-	    try {
-			rs = stmt.executeQuery("SELECT * FROM nino");
-		} catch (SQLException e) {
-			System.out.println("Error al ejecutar el statement");
-			e.printStackTrace();
-		}
+		String consulta = "SELECT * FROM nino";
+		
+		rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
 			while (rs.next()){

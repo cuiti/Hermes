@@ -3,10 +3,8 @@ package hermes.dao;
 import hermes.db.BaseDeDatos;
 import hermes.model.Contenido;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,27 +12,13 @@ public class ContenidoDAO implements IContenidoDAO {
 
 	@Override
 	public List<Contenido> listarContenidos() {
-		BaseDeDatos database = new BaseDeDatos();
-		Connection c;
-	    Statement stmt = null;
-	    ResultSet rs = null;
-	    
+		BaseDeDatos db = new BaseDeDatos();
+	    ResultSet rs = null;    
 	    List<Contenido> lista = new LinkedList<Contenido>();
 	    
-	    c = database.getConnection();
-	    
-	    try {
-			stmt = c.createStatement();
-		} catch (SQLException e) {
-			System.out.println("Error al crear el statement");
-			e.printStackTrace();
-		}
-	    try {
-			rs = stmt.executeQuery("SELECT * FROM contenido");
-		} catch (SQLException e) {
-			System.out.println("Error al ejecutar el statement");
-			e.printStackTrace();
-		}
+	    String consulta = "SELECT * FROM contenido";	    
+	   
+	    rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
 			while (rs.next()){
