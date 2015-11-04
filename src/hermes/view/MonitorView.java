@@ -1,8 +1,10 @@
 package hermes.view;
 
 import hermes.dao.*;
+import hermes.db.LecturaJSON;
 import hermes.model.*;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
@@ -14,6 +16,9 @@ import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import com.toedter.calendar.JDateChooser;
 
 @SuppressWarnings("serial")
@@ -32,6 +37,16 @@ public class MonitorView extends JFrame {
 	private JComboBox<Etiqueta> cboEliminarEtiqueta;
 	private JComboBox<Etiqueta> cboAsignarEtiqueta;
 	private DefaultTableModel modeloTabla;
+	
+	private JDateChooser dcFechaDesde;
+	private JDateChooser dcFechaHasta;
+	
+	private Contenido contenido = null;
+	private Contexto contexto = null;
+	private Nino nino = null;
+	private Categoria categoria = null;
+	private Etiqueta etiqueta = null;
+	
 	
 	/**
 	 * Launch the application.
@@ -100,14 +115,11 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
 		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
 	}
+
+	public void rellenarTabla(List<Notificacion> lista) {
 	
-	public void rellenarTabla() {
-		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
-		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
-			
-		System.out.println(lista.size());
 	    for (Notificacion n: lista) {
-	    	Object[] fila = new Object[6];
+	    	Object[] fila = new Object[7];
 	    	
 	    	fila[0] = n.getFecha_envio();
 	    	fila[1] = n.getContenido();
@@ -115,11 +127,12 @@ public class MonitorView extends JFrame {
 	    	fila[3] = n.getCategoria();
 	    	fila[4] = n.getNino();
 	    	fila[5] = n.getEtiquetasComoString();
+	    	fila[6] = n.getId();
 		
 	    	modeloTabla.addRow(fila);
 	    }
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -146,6 +159,40 @@ public class MonitorView extends JFrame {
 		cboEtiqueta.setBounds(120, 220, 152, 26);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+//				DateFormat df = DateFormat.getDateInstance();
+/*				String fecha_desde = dcFechaDesde.getDate().toString();
+				String fecha_hasta = dcFechaHasta.getDate().toString();*/
+				
+/*				Date fecha_desde = dcFechaDesde.getDate();
+				String dateString = String.format("%1$td-%1$tm-%1$tY", fecha_desde);*/
+				
+/*			    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:MM:SS");
+			    System.out.println(formatter.format(dcFechaDesde.getDate()));*/
+				
+				String fecha_desde = "08/10/2015 14:00";
+				String fecha_hasta = "10/11/2015 15:08";
+				
+				contenido = (Contenido)cboContenido.getSelectedItem();
+				contexto = (Contexto)cboContexto.getSelectedItem();
+				categoria = (Categoria)cboCategoria.getSelectedItem();
+				nino = (Nino)cboNino.getSelectedItem();
+				etiqueta = (Etiqueta)cboEtiqueta.getModel().getSelectedItem();
+				
+/*				System.out.println(fecha_desde);
+				System.out.println(fecha_hasta);*/
+				
+				INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+				List<Notificacion> lista = notificacionDAO.filtrarNotificaciones(fecha_desde, fecha_hasta, contenido, 
+						contexto, categoria, nino, etiqueta);
+				
+				modeloTabla.setRowCount(0);
+				rellenarTabla(lista);
+				
+			}
+		});
 		btnFiltrar.setBounds(118, 253, 154, 25);
 		
 		JLabel label_2 = new JLabel("Nin@");
@@ -160,13 +207,13 @@ public class MonitorView extends JFrame {
 		JLabel label_5 = new JLabel("hasta");
 		label_5.setBounds(285, 160, 70, 15);
 		
-		cboContenido = new JComboBox<Contenido>();
+		cboContenido = new JComboBox<Contenido>();	
 		cboContenido.setBounds(120, 30, 152, 24);
 		
 		cboContexto = new JComboBox<Contexto>();
 		cboContexto.setBounds(120, 62, 152, 24);
 		
-		cboNino = new JComboBox<Nino>();
+		cboNino = new JComboBox<Nino>();	
 		cboNino.setBounds(120, 95, 152, 24);
 		
 		JLabel label_6 = new JLabel("Etiqueta");
@@ -188,18 +235,18 @@ public class MonitorView extends JFrame {
 		panelFiltros.add(cboNino);
 		panelFiltros.add(label_3);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(120, 183, 152, 26);
-		panelFiltros.add(dateChooser);
+		JDateChooser dcFechaDesde = new JDateChooser();
+		dcFechaDesde.setBounds(120, 183, 152, 26);
+		panelFiltros.add(dcFechaDesde);
 		panelFiltros.add(label_4);
 		panelFiltros.add(label_5);
 		panelFiltros.add(label_6);
 		panelFiltros.add(cboEtiqueta);
 		panelFiltros.add(btnFiltrar);
 		
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(282, 183, 152, 26);
-		panelFiltros.add(dateChooser_1);
+		JDateChooser dcFechaHasta = new JDateChooser();
+		dcFechaHasta.setBounds(282, 183, 152, 26);
+		panelFiltros.add(dcFechaHasta);
 		
 		JPanel panelEtiquetas = new JPanel();
 		panelEtiquetas.setBounds(567, 5, 495, 285);
@@ -248,6 +295,32 @@ public class MonitorView extends JFrame {
 		btnEliminar.addActionListener(new BotonEliminarEtiquetaListener());
 		
 		JButton btnAsignardesasig = new JButton("Asignar/Desasig.");
+		btnAsignardesasig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) { 
+				
+				etiqueta = (Etiqueta)cboAsignarEtiqueta.getModel().getSelectedItem();
+				int filaseleccionada = table.getSelectedRow();
+			         
+				if (filaseleccionada == -1) {
+			             JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
+			    } else {
+			             DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+			             String etiquetas = (String)modelo.getValueAt(filaseleccionada, 5);
+		            	 Integer id_notificacion = (Integer)modelo.getValueAt(filaseleccionada, 6);
+		            	 System.out.println(id_notificacion);
+		            	 IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+			             if (!etiquetas.contains(etiqueta.getTexto())) {		         	 
+			            	 etiquetaDAO.asignarEtiqueta(id_notificacion, etiqueta.getId());
+			             } else {
+			            	 etiquetaDAO.desasignarEtiqueta(id_notificacion, etiqueta.getId());
+			             }
+			             modeloTabla.setRowCount(0);
+			             INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+			             List<Notificacion> lista = notificacionDAO.listarNotificaciones();
+			             rellenarTabla(lista);
+			    }
+			}
+		});
 		btnAsignardesasig.setBounds(326, 101, 154, 25);
 		
 		JButton btnRenombrar = new JButton("Renombrar");
@@ -293,17 +366,18 @@ public class MonitorView extends JFrame {
 		);
 		
 		table = new JTable();
-		table.setEnabled(false);
 		modeloTabla = new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-					"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas"
+					"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas", "Id_notificacion"
 			}
 		);
 		table.setModel(modeloTabla);
-		rellenarTabla();
-		TableRowSorter sorter = new TableRowSorter(modeloTabla);
+		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
+		rellenarTabla(lista);
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(modeloTabla);
 		table.setRowSorter(sorter);
 		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
@@ -315,6 +389,9 @@ public class MonitorView extends JFrame {
 		inicializarComboBoxNino();
 		
 		refrescarComboBoxEtiqueta();
+		
+		LecturaJSON lector = new LecturaJSON();
+		lector.cargarNotificaciones("notificaciones.txt");
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{

@@ -64,4 +64,20 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 		return db.ejecutarABM(query);
 	}
 
+	@Override
+	public boolean asignarEtiqueta(int id_notificacion, int id_etiqueta) {		
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO notificacion_etiqueta (id_notificacion, id_etiqueta) "
+	    		+ "VALUES ("+id_notificacion + "," + id_etiqueta + ");";
+		return db.ejecutarABM(query);
+	}
+
+	@Override
+	public boolean desasignarEtiqueta(int id_notificacion, int id_etiqueta) {
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "DELETE FROM notificacion_etiqueta "
+	    		+ "WHERE id_notificacion = "+ id_notificacion +" AND id_etiqueta = "+ id_etiqueta +";";
+		return db.ejecutarABM(query);
+	}
+
 }

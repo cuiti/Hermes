@@ -91,6 +91,31 @@ public class NotificacionDAO implements INotificacionDAO {
 		}
 	    return lista;
 	}
+
+	@Override
+	public List<Notificacion> filtrarNotificaciones(String fecha_desde, String fecha_hasta, Contenido contenido,
+			Contexto contexto, Categoria categoria, Nino nino, Etiqueta etiqueta) {
+		
+		List<Notificacion> notificaciones = listarNotificaciones();
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones) {
+			boolean encontre = false; 
+			
+			for (Etiqueta e: n.getEtiquetas()) //FIXME :)
+				if (e.equals(etiqueta))
+					encontre = true;
+			
+			if (encontre 
+					& n.getContenido().equals(contenido) 
+					& n.getContexto().equals(contexto) 
+					& n.getCategoria().equals(categoria) 
+					& n.getNino().equals(nino)) { 
+				lista.add(n);
+			}
+		}
+		return lista;			
+	}
 		
 }
 
