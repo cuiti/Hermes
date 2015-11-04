@@ -55,6 +55,8 @@ public class MonitorView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					LecturaJSON lector = new LecturaJSON();
+					lector.cargarNotificaciones("notificaciones.txt");
 					MonitorView frame = new MonitorView();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -121,13 +123,13 @@ public class MonitorView extends JFrame {
 	    for (Notificacion n: lista) {
 	    	Object[] fila = new Object[7];
 	    	
-	    	fila[0] = n.getFecha_envio();
-	    	fila[1] = n.getContenido();
-	    	fila[2] = n.getContexto();
-	    	fila[3] = n.getCategoria();
-	    	fila[4] = n.getNino();
-	    	fila[5] = n.getEtiquetasComoString();
-	    	fila[6] = n.getId();
+	    	fila[0] = n.getId();
+	    	fila[1] = n.getFecha_envio();
+	    	fila[2] = n.getContenido();
+	    	fila[3] = n.getContexto();
+	    	fila[4] = n.getCategoria();
+	    	fila[5] = n.getNino();
+	    	fila[6] = n.getEtiquetasComoString();
 		
 	    	modeloTabla.addRow(fila);
 	    }
@@ -158,22 +160,21 @@ public class MonitorView extends JFrame {
 		cboEtiqueta = new JComboBox<Etiqueta>();
 		cboEtiqueta.setBounds(120, 220, 152, 26);
 		
+		JDateChooser dcFechaDesde = new JDateChooser();
+		dcFechaDesde.setBounds(120, 183, 152, 26);
+		panelFiltros.add(dcFechaDesde);
+		JDateChooser dcFechaHasta = new JDateChooser();
+		dcFechaHasta.setBounds(282, 183, 152, 26);
+		panelFiltros.add(dcFechaHasta);
+		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Date fecha_desde = new Date();
+				Date fecha_hasta = new Date();
 				
-//				DateFormat df = DateFormat.getDateInstance();
-/*				String fecha_desde = dcFechaDesde.getDate().toString();
-				String fecha_hasta = dcFechaHasta.getDate().toString();*/
-				
-/*				Date fecha_desde = dcFechaDesde.getDate();
-				String dateString = String.format("%1$td-%1$tm-%1$tY", fecha_desde);*/
-				
-/*			    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:MM:SS");
-			    System.out.println(formatter.format(dcFechaDesde.getDate()));*/
-				
-				String fecha_desde = "08/10/2015 14:00";
-				String fecha_hasta = "10/11/2015 15:08";
+				fecha_desde = dcFechaDesde.getDate();
+				fecha_hasta = dcFechaHasta.getDate();
 				
 				contenido = (Contenido)cboContenido.getSelectedItem();
 				contexto = (Contexto)cboContexto.getSelectedItem();
@@ -181,8 +182,8 @@ public class MonitorView extends JFrame {
 				nino = (Nino)cboNino.getSelectedItem();
 				etiqueta = (Etiqueta)cboEtiqueta.getModel().getSelectedItem();
 				
-/*				System.out.println(fecha_desde);
-				System.out.println(fecha_hasta);*/
+				System.out.println(fecha_desde);
+				System.out.println(fecha_hasta);
 				
 				INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 				List<Notificacion> lista = notificacionDAO.filtrarNotificaciones(fecha_desde, fecha_hasta, contenido, 
@@ -235,18 +236,26 @@ public class MonitorView extends JFrame {
 		panelFiltros.add(cboNino);
 		panelFiltros.add(label_3);
 		
-		JDateChooser dcFechaDesde = new JDateChooser();
-		dcFechaDesde.setBounds(120, 183, 152, 26);
-		panelFiltros.add(dcFechaDesde);
+		
 		panelFiltros.add(label_4);
 		panelFiltros.add(label_5);
 		panelFiltros.add(label_6);
 		panelFiltros.add(cboEtiqueta);
 		panelFiltros.add(btnFiltrar);
 		
-		JDateChooser dcFechaHasta = new JDateChooser();
-		dcFechaHasta.setBounds(282, 183, 152, 26);
-		panelFiltros.add(dcFechaHasta);
+		JButton btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modeloTabla.setRowCount(0);
+	             INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+	             List<Notificacion> lista = notificacionDAO.listarNotificaciones();
+	             rellenarTabla(lista);
+			}
+		});
+		btnLimpiar.setBounds(381, 254, 154, 25);
+		panelFiltros.add(btnLimpiar);
+		
+
 		
 		JPanel panelEtiquetas = new JPanel();
 		panelEtiquetas.setBounds(567, 5, 495, 285);
@@ -370,10 +379,15 @@ public class MonitorView extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-					"Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas", "Id_notificacion"
+					"#", "Fecha/Hora envio", "Contenido", "Contexto", "Categoria", "Nin@", "Etiquetas", 
 			}
 		);
 		table.setModel(modeloTabla);
+		table.getColumnModel().getColumn(0).setMaxWidth(1);
+
+		table.getColumnModel().getColumn(0).setMinWidth(1);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(1);
 		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
 		rellenarTabla(lista);
@@ -382,7 +396,7 @@ public class MonitorView extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
-		
+//		
 		inicializarComboBoxCategoria();
 		inicializarComboBoxContenido();
 		inicializarComboBoxContexto();
@@ -390,8 +404,8 @@ public class MonitorView extends JFrame {
 		
 		refrescarComboBoxEtiqueta();
 		
-		LecturaJSON lector = new LecturaJSON();
-		lector.cargarNotificaciones("notificaciones.txt");
+//		LecturaJSON lector = new LecturaJSON();
+//		lector.cargarNotificaciones("notificaciones.txt");
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{

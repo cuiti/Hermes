@@ -1,20 +1,15 @@
 package hermes.dao;
 
-import java.util.List;
+import java.util.*;
 
-import hermes.model.Categoria;
-import hermes.model.Contenido;
-import hermes.model.Contexto;
-import hermes.model.Etiqueta;
-import hermes.model.Nino;
-import hermes.model.Notificacion;
+import hermes.model.*;
 
 public interface INotificacionDAO {
 	
 	public List<Notificacion> listarNotificaciones();
 	public boolean guardarNotificacion(Notificacion n);
 	public List<Etiqueta> getEtiquetasByIdNotificacion(int id);
-	public List<Notificacion> filtrarNotificaciones(String fecha_desde, String fecha_hasta, 
+	public List<Notificacion> filtrarNotificaciones(Date fecha_desde, Date fecha_hasta, 
 			Contenido contenido, Contexto contexto, Categoria categoria, Nino nino, Etiqueta etiqueta);
 
 

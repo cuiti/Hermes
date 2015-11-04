@@ -1,9 +1,11 @@
 package hermes.db;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import hermes.dao.FactoriaDAO;
 import hermes.dao.INotificacionDAO;
@@ -21,15 +23,21 @@ public class LecturaJSON {
 			String dir = System.getProperty("user.dir");
 			File archivo = new File(dir+"/"+nombreArchivo);
 			BufferedReader br = new BufferedReader(new FileReader(archivo));
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm").create();
 			
-			List<Notificacion> lista = FactoriaDAO.getNotificacionDAO().listarNotificaciones();
+//			List<Notificacion> lista = new ArrayList<Notificacion>();
+//			lista = FactoriaDAO.getNotificacionDAO().listarNotificaciones();
+//			for (Notificacion n : lista){
+//				System.out.println(gson.toJson(n));
+//				
+//			}
 			
-			System.out.println(gson.toJson(lista.get(0)));
-			
+			Notificacion notificacion;
 			while ((lineaActual = br.readLine()) != null) {
-				System.out.println(lineaActual);
 				
+				notificacion = gson.fromJson(lineaActual, Notificacion.class);
+				
+				//FactoriaDAO.getNotificacionDAO().guardarNotificacion(notificacion);
 			}
 			
 			br.close();

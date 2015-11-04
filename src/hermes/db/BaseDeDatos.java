@@ -43,6 +43,7 @@ public class BaseDeDatos {
 			resultados = stmt.executeQuery(consulta);
 			
 		} catch (SQLException e) {
+			System.out.println(consulta);
 			System.out.println("Error al ejecutar el statement");
 			e.printStackTrace();
 		}
@@ -66,6 +67,7 @@ public class BaseDeDatos {
 	      conexion.close();
 	      return true;
 	    } catch ( Exception e ) {
+	    	System.out.println(query);
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      return false;
 	    }

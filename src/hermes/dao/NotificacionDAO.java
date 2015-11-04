@@ -1,8 +1,12 @@
 package hermes.dao;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+
 
 import hermes.db.BaseDeDatos;
 import hermes.model.*;
@@ -34,18 +38,27 @@ public class NotificacionDAO implements INotificacionDAO {
 				
 				List<Etiqueta> etiquetas = new ArrayList<Etiqueta>();		
 				etiquetas = getEtiquetasByIdNotificacion(rs.getInt("id"));
+				
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-				Notificacion notificacion = new Notificacion(
-										rs.getInt("id"),
-										new Categoria (rs.getInt("id_categoria"),rs.getString("categoria")),
-										new Contenido(rs.getInt("id_contenido"),rs.getString("contenido")),
-										new Contexto(rs.getInt("id_contexto"),rs.getString("contexto")),
-										new Nino(rs.getInt("id_nino"),rs.getString("nombre"),rs.getString("apellido")),
-										rs.getString("fecha_recepcion"),
-										rs.getString("fecha_envio"), etiquetas
-							);
-							
-				lista.add(notificacion);				
+				Notificacion notificacion;
+				try {
+					notificacion = new Notificacion(
+											rs.getInt("id"),
+											new Categoria (rs.getInt("id_categoria"),rs.getString("categoria")),
+											new Contenido(rs.getInt("id_contenido"),rs.getString("contenido")),
+											new Contexto(rs.getInt("id_contexto"),rs.getString("contexto")),
+											new Nino(rs.getInt("id_nino"),rs.getString("nombre"),rs.getString("apellido")),
+											formatter.parse(rs.getString("fecha_recepcion")),
+											formatter.parse(rs.getString("fecha_envio")), etiquetas
+								);				
+					lista.add(notificacion);
+					
+				} catch (ParseException e) {
+					System.out.println("Error al parsear fecha");
+					e.printStackTrace();
+				}
+															
 			}
 			
 		} catch (SQLException e) {
@@ -57,8 +70,18 @@ public class NotificacionDAO implements INotificacionDAO {
 
 	@Override
 	public boolean guardarNotificacion(Notificacion n) {
-		// TODO Auto-generated method stub
-		return false;
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO notificacion (id_contenido, id_contexto, id_categoria, fecha_envio, fecha_recepcion, id_nino) "
+	    		+ "VALUES ("		
+	    		+ n.getContenido().getId() + ","
+	    		+ n.getContexto().getId() + ","
+	    		+ n.getCategoria().getId() + ",'"
+	    		+ formatter.format(n.getFecha_envio().toString()) + "','"
+	    		+ formatter.format(n.getFecha_recepcion()) + "',"
+	    		+ n.getNino().getId()
+	    		+ ");";
+		return db.ejecutarABM(query);
 	}
 
 	@Override
@@ -92,8 +115,7 @@ public class NotificacionDAO implements INotificacionDAO {
 	    return lista;
 	}
 
-	@Override
-	public List<Notificacion> filtrarNotificaciones(String fecha_desde, String fecha_hasta, Contenido contenido,
+	public List<Notificacion> filtrarNotificaciones(Date fecha_desde, Date fecha_hasta, Contenido contenido,
 			Contexto contexto, Categoria categoria, Nino nino, Etiqueta etiqueta) {
 		
 		List<Notificacion> notificaciones = listarNotificaciones();
@@ -110,7 +132,8 @@ public class NotificacionDAO implements INotificacionDAO {
 					& n.getContenido().equals(contenido) 
 					& n.getContexto().equals(contexto) 
 					& n.getCategoria().equals(categoria) 
-					& n.getNino().equals(nino)) { 
+					& n.getNino().equals(nino) 
+					& (n.getFecha_envio().after(fecha_desde) && n.getFecha_envio().before(fecha_hasta))){ 
 				lista.add(n);
 			}
 		}

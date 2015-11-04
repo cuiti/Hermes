@@ -1,5 +1,6 @@
 package hermes.model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Notificacion {
@@ -8,20 +9,20 @@ public class Notificacion {
 	private Contenido contenido;
 	private Contexto contexto;
 	private Nino nino;
-	private String fecha_recepcion;
-	private String fecha_envio;
+	private Date fecha_recepcion;
+	private Date fecha_envio;
 	private List<Etiqueta> etiquetas;
 
 	public Notificacion(int id, Categoria categoria, Contenido contenido, Contexto contexto, Nino nino,
-			String fecha_recepcion, String fecha_envio, List<Etiqueta> etiquetas) {
+			Date string, Date string2, List<Etiqueta> etiquetas) {
 		super();
 		this.id = id;
 		this.categoria = categoria;
 		this.contenido = contenido;
 		this.contexto = contexto;
 		this.nino = nino;
-		this.fecha_recepcion = fecha_recepcion;
-		this.fecha_envio = fecha_envio;
+		this.fecha_recepcion = string;
+		this.fecha_envio = string2;
 		this.etiquetas = etiquetas;
 	}
 
@@ -65,19 +66,19 @@ public class Notificacion {
 		this.nino = nino;
 	}
 
-	public String getFecha_recepcion() {
+	public Date getFecha_recepcion() {
 		return fecha_recepcion;
 	}
 
-	public void setFecha_recepcion(String fecha_recepcion) {
+	public void setFecha_recepcion(Date fecha_recepcion) {
 		this.fecha_recepcion = fecha_recepcion;
 	}
 
-	public String getFecha_envio() {
+	public Date getFecha_envio() {
 		return fecha_envio;
 	}
 
-	public void setFecha_envio(String fecha_envio) {
+	public void setFecha_envio(Date fecha_envio) {
 		this.fecha_envio = fecha_envio;
 	}
 
@@ -90,10 +91,14 @@ public class Notificacion {
 	}
 	
 	public String getEtiquetasComoString() {
-		String etiquetas = "";
-		for (Etiqueta e : this.etiquetas)
-			etiquetas = etiquetas + e.getTexto() + " ";
-		return etiquetas;
+		String etiquetasComoString = "";
+		if (etiquetas.size() > 1) {
+			for (Etiqueta e : etiquetas)
+				etiquetasComoString += e.getTexto() + ", ";
+		} else {
+			if (etiquetas.size() == 1) etiquetasComoString += this.etiquetas.get(0);
+		}
+		return etiquetasComoString;
 	}
 
 }
