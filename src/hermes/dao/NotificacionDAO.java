@@ -118,27 +118,94 @@ public class NotificacionDAO implements INotificacionDAO {
 	public List<Notificacion> filtrarNotificaciones(Date fecha_desde, Date fecha_hasta, Contenido contenido,
 			Contexto contexto, Categoria categoria, Nino nino, Etiqueta etiqueta) {
 		
-		List<Notificacion> notificaciones = listarNotificaciones();
+		List<Notificacion> notificaciones= listarNotificaciones();
+		
+		if (etiqueta.getId()>0) notificaciones=filtroEtiquetas(notificaciones, etiqueta);
+		
+		if (contenido.getId()>0) notificaciones=filtroContenido(notificaciones, contenido);
+		
+		if (contexto.getId()>0) notificaciones=filtroContexto(notificaciones, contexto);
+		
+		if (categoria.getId()>0) notificaciones=filtroCategoria(notificaciones, categoria);
+		
+		if (nino.getId()>0) notificaciones=filtroNino(notificaciones, nino);
+		
+		notificaciones= filtroFechas(notificaciones, fecha_desde, fecha_hasta);
+		
+		return notificaciones;			
+	}
+	
+	public List<Notificacion> filtroEtiquetas(List<Notificacion> notificaciones, Etiqueta etiqueta ){
 		List<Notificacion> lista = new ArrayList<Notificacion>();
 		
-		for (Notificacion n: notificaciones) {
-			boolean encontre = false; 
-			
-			for (Etiqueta e: n.getEtiquetas()) //FIXME :)
+		boolean encontre = false;
+		
+		for (Notificacion n: notificaciones){
+			for (Etiqueta e: n.getEtiquetas()) 
 				if (e.equals(etiqueta))
 					encontre = true;
-			
-			if (encontre 
-					& n.getContenido().equals(contenido) 
-					& n.getContexto().equals(contexto) 
-					& n.getCategoria().equals(categoria) 
-					& n.getNino().equals(nino) 
-					& (n.getFecha_envio().after(fecha_desde) && n.getFecha_envio().before(fecha_hasta))){ 
+			if (encontre){
 				lista.add(n);
 			}
 		}
-		return lista;			
+		
+		return lista;		
 	}
 		
+	public List<Notificacion> filtroContenido(List<Notificacion> notificaciones, Contenido contenido){
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones){
+			if(n.getContenido().equals(contenido)){
+				lista.add(n);
+			}
+		}
+		
+		return lista;
+	}
+	
+	public List<Notificacion> filtroContexto(List<Notificacion> notificaciones, Contexto c){
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones){
+			if(n.getContexto().equals(c)){
+				lista.add(n);
+			}
+		}
+		return lista;
+	}
+	
+	public List<Notificacion> filtroCategoria(List<Notificacion> notificaciones, Categoria c){
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones){
+			if(n.getCategoria().equals(c)){
+				lista.add(n);
+			}
+		}
+		return lista;
+	}
+	
+	public List<Notificacion> filtroNino(List<Notificacion> notificaciones, Nino nino){
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones){
+			if(n.getNino().equals(nino)){
+				lista.add(n);
+			}
+		}
+		return lista;
+	}
+	
+	public List<Notificacion> filtroFechas(List<Notificacion> notificaciones, Date desde, Date hasta){
+		List<Notificacion> lista = new ArrayList<Notificacion>();
+		
+		for (Notificacion n: notificaciones){
+			if(n.getFecha_envio().after(desde) && n.getFecha_envio().before(hasta)){
+				lista.add(n);
+			}
+		}
+		return lista;
+	}
 }
 

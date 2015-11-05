@@ -17,6 +17,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.toedter.calendar.JDateChooser;
@@ -66,42 +67,65 @@ public class MonitorView extends JFrame {
 		});
 	}
 	
-	public void inicializarComboBoxCategoria() {
+	public void inicializarComboBoxCategoria(JComboBox<Categoria> combo) {
 		ICategoriaDAO categoriaDAO = FactoriaDAO.getCategoriaDAO();
-		List<Categoria> lista;
-		lista = categoriaDAO.listarCategorias();
+		List<Categoria> lista = categoriaDAO.listarCategorias();
+		DefaultComboBoxModel<Categoria> modelo = new DefaultComboBoxModel<Categoria>();
+		Categoria categoria = new Categoria(0, "«Todos»");
+		modelo.addElement(categoria);
 		for (Categoria c: lista)
-			cboCategoria.addItem(c);
+			modelo.addElement(c);
+		combo.setModel(modelo);
 	}
 	
-	public void inicializarComboBoxContenido() {
+	public void inicializarComboBoxContenido(JComboBox<Contenido> combo) {
 		IContenidoDAO contenidoDAO = FactoriaDAO.getContenidoDAO();
-		List<Contenido> lista;
-		lista = contenidoDAO.listarContenidos();
+		List<Contenido> lista = contenidoDAO.listarContenidos();
+		DefaultComboBoxModel<Contenido> modelo = new DefaultComboBoxModel<Contenido>();
+		Contenido contenido = new Contenido(0, "«Todos»");
+		modelo.addElement(contenido);
 		for (Contenido c: lista)
-			cboContenido.addItem(c);
+			modelo.addElement(c);
+		combo.setModel(modelo);
 	}
 	
-	public void inicializarComboBoxContexto() {
+	public void inicializarComboBoxContexto(JComboBox<Contexto> combo) {
 		IContextoDAO contextoDAO = FactoriaDAO.getContextoDAO();
-		List<Contexto> lista;
-		lista = contextoDAO.listarContextos();
+		List<Contexto> lista = contextoDAO.listarContextos();
+		DefaultComboBoxModel<Contexto> modelo = new DefaultComboBoxModel<Contexto>();
+		Contexto contexto = new Contexto(0, "«Todos»");
+		modelo.addElement(contexto);
 		for (Contexto c: lista)
-			cboContexto.addItem(c);
+			modelo.addElement(c);
+		combo.setModel(modelo);
 	}
 	
-	public void inicializarComboBoxNino() {
+	public void inicializarComboBoxNino(JComboBox<Nino> combo) {
 		INinoDAO ninoDAO = FactoriaDAO.getNinoDAO();
-		List<Nino> lista;
-		lista = ninoDAO.listarNinos();
+		List<Nino> lista = ninoDAO.listarNinos();
+		DefaultComboBoxModel<Nino> modelo = new DefaultComboBoxModel<Nino>();
+		Nino nino = new Nino(0, "«Todos»", "");
+		modelo.addElement(nino);
 		for (Nino n: lista)
-			cboNino.addItem(n);
+			modelo.addElement(n);
+		combo.setModel(modelo);
 	}
 	
 	/**
 	 * Obtiene todas las etiquetas de la base de datos y las agrega al JComboBox
 	 * @param combo el JComboBox que va a ser rellenado
 	 */
+	private void inicializarComboBoxEtiquetaParaFiltro(JComboBox<Etiqueta> combo) {
+		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
+		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
+		DefaultComboBoxModel<Etiqueta> modelo = new DefaultComboBoxModel<Etiqueta>();
+		Etiqueta etiqueta = new Etiqueta(0, "«Todos»");
+		modelo.addElement(etiqueta);
+		for (Etiqueta e: lista)
+			modelo.addElement(e);
+		combo.setModel(modelo);
+	}
+	
 	private void inicializarComboBoxEtiqueta(JComboBox<Etiqueta> combo) {
 		IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 		List<Etiqueta> lista = etiquetaDAO.listarEtiquetas();
@@ -113,18 +137,20 @@ public class MonitorView extends JFrame {
 	
 	private void refrescarComboBoxEtiqueta() {
 		inicializarComboBoxEtiqueta(cboRenombrarEtiqueta);
-		inicializarComboBoxEtiqueta(cboEtiqueta);
+		inicializarComboBoxEtiquetaParaFiltro(cboEtiqueta);
 		inicializarComboBoxEtiqueta(cboEliminarEtiqueta);
 		inicializarComboBoxEtiqueta(cboAsignarEtiqueta);
 	}
 
 	public void rellenarTabla(List<Notificacion> lista) {
-	
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
 	    for (Notificacion n: lista) {
 	    	Object[] fila = new Object[7];
 	    	
 	    	fila[0] = n.getId();
-	    	fila[1] = n.getFecha_envio();
+	    	fila[1] = formatter.format(n.getFecha_envio());
 	    	fila[2] = n.getContenido();
 	    	fila[3] = n.getContexto();
 	    	fila[4] = n.getCategoria();
@@ -151,6 +177,8 @@ public class MonitorView extends JFrame {
 		contentPane.add(panelFiltros);
 		panelFiltros.setBorder(new TitledBorder(null, "Filtros", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
 		JLabel label = new JLabel("Contenido");
 		label.setBounds(26, 35, 73, 15);
 		
@@ -162,9 +190,18 @@ public class MonitorView extends JFrame {
 		
 		JDateChooser dcFechaDesde = new JDateChooser();
 		dcFechaDesde.setBounds(120, 183, 152, 26);
-		panelFiltros.add(dcFechaDesde);
+
 		JDateChooser dcFechaHasta = new JDateChooser();
 		dcFechaHasta.setBounds(282, 183, 152, 26);
+		
+		try {
+			dcFechaDesde.setDate(formatter.parse("01/01/2015 00:01"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		dcFechaHasta.setDate(new Date());
+		
+		panelFiltros.add(dcFechaDesde);
 		panelFiltros.add(dcFechaHasta);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -383,11 +420,11 @@ public class MonitorView extends JFrame {
 			}
 		);
 		table.setModel(modeloTabla);
-		table.getColumnModel().getColumn(0).setMaxWidth(1);
+		table.getColumnModel().getColumn(0).setMaxWidth(16);
 
-		table.getColumnModel().getColumn(0).setMinWidth(1);
+		table.getColumnModel().getColumn(0).setMinWidth(4);
 
-		table.getColumnModel().getColumn(0).setPreferredWidth(1);
+		table.getColumnModel().getColumn(0).setPreferredWidth(10);
 		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
 		rellenarTabla(lista);
@@ -397,10 +434,10 @@ public class MonitorView extends JFrame {
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
 //		
-		inicializarComboBoxCategoria();
-		inicializarComboBoxContenido();
-		inicializarComboBoxContexto();
-		inicializarComboBoxNino();
+		inicializarComboBoxCategoria(cboCategoria);
+		inicializarComboBoxContenido(cboContenido);
+		inicializarComboBoxContexto(cboContexto);
+		inicializarComboBoxNino(cboNino);
 		
 		refrescarComboBoxEtiqueta();
 		

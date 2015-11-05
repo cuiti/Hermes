@@ -43,6 +43,7 @@ public class LecturaJSON {
 			br.close();
 			return true;
 		}catch (IOException e){
+			System.out.println("Se debe tener el archivo notificaciones.txt en el mismo directorio donde se ejecute el programa");
 			e.printStackTrace();
 			return false;
 		}
