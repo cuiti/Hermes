@@ -38,9 +38,10 @@ public class MonitorView extends JFrame {
 	private JComboBox<Etiqueta> cboEliminarEtiqueta;
 	private JComboBox<Etiqueta> cboAsignarEtiqueta;
 	private DefaultTableModel modeloTabla;
+	JButton btnFiltrar;
 	
-	private JDateChooser dcFechaDesde;
-	private JDateChooser dcFechaHasta;
+	private  JDateChooser dcFechaDesde=new JDateChooser();
+	private JDateChooser dcFechaHasta=new JDateChooser();
 	
 	private Contenido contenido = null;
 	private Contexto contexto = null;
@@ -204,7 +205,8 @@ public class MonitorView extends JFrame {
 		panelFiltros.add(dcFechaDesde);
 		panelFiltros.add(dcFechaHasta);
 		
-		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar = new JButton("Filtrar");
+		
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Date fecha_desde = new Date();
@@ -218,9 +220,6 @@ public class MonitorView extends JFrame {
 				categoria = (Categoria)cboCategoria.getSelectedItem();
 				nino = (Nino)cboNino.getSelectedItem();
 				etiqueta = (Etiqueta)cboEtiqueta.getModel().getSelectedItem();
-				
-				System.out.println(fecha_desde);
-				System.out.println(fecha_hasta);
 				
 				INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 				List<Notificacion> lista = notificacionDAO.filtrarNotificaciones(fecha_desde, fecha_hasta, contenido, 
@@ -284,9 +283,9 @@ public class MonitorView extends JFrame {
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				modeloTabla.setRowCount(0);
-	             INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
-	             List<Notificacion> lista = notificacionDAO.listarNotificaciones();
-	             rellenarTabla(lista);
+	            INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
+	            List<Notificacion> lista = notificacionDAO.listarNotificaciones();
+	            rellenarTabla(lista);
 			}
 		});
 		btnLimpiar.setBounds(381, 254, 154, 25);
@@ -351,8 +350,8 @@ public class MonitorView extends JFrame {
 			             JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
 			    } else {
 			             DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			             String etiquetas = (String)modelo.getValueAt(filaseleccionada, 5);
-		            	 Integer id_notificacion = (Integer)modelo.getValueAt(filaseleccionada, 6);
+			             String etiquetas = (String)modelo.getValueAt(filaseleccionada, 6);
+		            	 Integer id_notificacion = (Integer)modelo.getValueAt(filaseleccionada, 0);
 		            	 System.out.println(id_notificacion);
 		            	 IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 			             if (!etiquetas.contains(etiqueta.getTexto())) {		         	 
@@ -477,6 +476,8 @@ public class MonitorView extends JFrame {
 				etiquetaDAO.renombrarEtiqueta(etiquetaOriginal, etiquetaNueva);
 				refrescarComboBoxEtiqueta();
 				txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
+				
+				btnFiltrar.doClick(); //para que se refresque la tabla usando los filtros
 			}	
 		}
 	}
