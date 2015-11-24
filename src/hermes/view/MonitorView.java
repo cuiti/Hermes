@@ -16,6 +16,8 @@ import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -162,6 +164,21 @@ public class MonitorView extends JFrame {
 	    }
 	}
 	
+/*	private static void requestMonitor(String notificacion){
+		try{
+			URL url = new URL("http://localhost");
+			HttpURLConnection coneccion = (HttpURLConnection) url.openConnection();
+			coneccion.setReadTimeout(5000);
+			coneccion.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+			coneccion.addRequestProperty("data", notificacion);
+			coneccion.connect();
+			System.out.println("Request URL ... " + coneccion.getResponseCode());
+		}catch(Exception e){
+			System.out.println(e);
+			e.printStackTrace();
+		}
+	}*/
+	
 	/**
 	 * Create the frame.
 	 */
@@ -174,7 +191,7 @@ public class MonitorView extends JFrame {
 		setContentPane(contentPane); 
 		contentPane.setLayout(null);
 		JPanel panelFiltros = new JPanel();
-		panelFiltros.setBounds(5, 5, 551, 285);
+		panelFiltros.setBounds(5, 5, 551, 256);
 		contentPane.add(panelFiltros);
 		panelFiltros.setBorder(new TitledBorder(null, "Filtros", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
@@ -187,7 +204,7 @@ public class MonitorView extends JFrame {
 		label_1.setBounds(26, 60, 70, 29);
 		
 		cboEtiqueta = new JComboBox<Etiqueta>();
-		cboEtiqueta.setBounds(120, 220, 152, 26);
+		cboEtiqueta.setBounds(383, 62, 152, 24);
 		
 		JDateChooser dcFechaDesde = new JDateChooser();
 		dcFechaDesde.setBounds(120, 183, 152, 26);
@@ -215,10 +232,10 @@ public class MonitorView extends JFrame {
 				fecha_desde = dcFechaDesde.getDate();
 				fecha_hasta = dcFechaHasta.getDate();
 				
-				contenido = (Contenido)cboContenido.getSelectedItem();
-				contexto = (Contexto)cboContexto.getSelectedItem();
-				categoria = (Categoria)cboCategoria.getSelectedItem();
-				nino = (Nino)cboNino.getSelectedItem();
+				contenido = (Contenido)cboContenido.getModel().getSelectedItem();
+				contexto = (Contexto)cboContexto.getModel().getSelectedItem();
+				categoria = (Categoria)cboCategoria.getModel().getSelectedItem();
+				nino = (Nino)cboNino.getModel().getSelectedItem();
 				etiqueta = (Etiqueta)cboEtiqueta.getModel().getSelectedItem();
 				
 				INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
@@ -230,7 +247,7 @@ public class MonitorView extends JFrame {
 				
 			}
 		});
-		btnFiltrar.setBounds(118, 253, 154, 25);
+		btnFiltrar.setBounds(120, 220, 152, 25);
 		
 		JLabel label_2 = new JLabel("Nin@");
 		label_2.setBounds(26, 100, 70, 15);
@@ -254,13 +271,13 @@ public class MonitorView extends JFrame {
 		cboNino.setBounds(120, 95, 152, 24);
 		
 		JLabel label_6 = new JLabel("Etiqueta");
-		label_6.setBounds(26, 226, 70, 15);
+		label_6.setBounds(303, 67, 70, 15);
 		
 		JLabel lblNewLabel = new JLabel("Categoria");
-		lblNewLabel.setBounds(301, 67, 73, 14);
+		lblNewLabel.setBounds(303, 35, 73, 14);
 		
 		cboCategoria = new JComboBox<Categoria>();
-		cboCategoria.setBounds(381, 62, 152, 24);
+		cboCategoria.setBounds(383, 30, 152, 24);
 		panelFiltros.setLayout(null);
 		panelFiltros.add(label);
 		panelFiltros.add(cboContenido);
@@ -279,8 +296,8 @@ public class MonitorView extends JFrame {
 		panelFiltros.add(cboEtiqueta);
 		panelFiltros.add(btnFiltrar);
 		
-		JButton btnLimpiar = new JButton("Limpiar");
-		btnLimpiar.addActionListener(new ActionListener() {
+		JButton btnMostrarTodo = new JButton("Mostrar Todo");
+		btnMostrarTodo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				modeloTabla.setRowCount(0);
 	            INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
@@ -288,13 +305,13 @@ public class MonitorView extends JFrame {
 	            rellenarTabla(lista);
 			}
 		});
-		btnLimpiar.setBounds(381, 254, 154, 25);
-		panelFiltros.add(btnLimpiar);
+		btnMostrarTodo.setBounds(383, 220, 152, 25);
+		panelFiltros.add(btnMostrarTodo);
 		
 
 		
 		JPanel panelEtiquetas = new JPanel();
-		panelEtiquetas.setBounds(567, 5, 495, 285);
+		panelEtiquetas.setBounds(567, 5, 495, 256);
 		contentPane.add(panelEtiquetas);
 		panelEtiquetas.setBorder(new TitledBorder(null, "Etiquetas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
@@ -302,41 +319,41 @@ public class MonitorView extends JFrame {
 		label_7.setBounds(23, 34, 104, 15);
 		
 		txtCrearEtiqueta = new JTextField();
-		txtCrearEtiqueta.setBounds(160, 29, 154, 24);
+		txtCrearEtiqueta.setBounds(160, 29, 152, 24);
 		txtCrearEtiqueta.setColumns(10);
 		
 		JLabel label_8 = new JLabel("Eliminar etiqueta");
 		label_8.setBounds(23, 70, 127, 15);
 		
 		cboEliminarEtiqueta = new JComboBox<Etiqueta>();
-		cboEliminarEtiqueta.setBounds(160, 65, 154, 24);
+		cboEliminarEtiqueta.setBounds(160, 65, 152, 24);
 		
 		JLabel label_9 = new JLabel("Asignar etiqueta");
 		label_9.setBounds(23, 106, 127, 15);
 		
 		cboAsignarEtiqueta = new JComboBox<Etiqueta>();
-		cboAsignarEtiqueta.setBounds(160, 101, 154, 24);
+		cboAsignarEtiqueta.setBounds(160, 101, 152, 24);
 		
 		JLabel label_10 = new JLabel("Renombrar etiqueta");
 		label_10.setBounds(23, 142, 127, 15);
 		
 		cboRenombrarEtiqueta = new JComboBox<Etiqueta>();
-		cboRenombrarEtiqueta.setBounds(160, 137, 154, 24);
+		cboRenombrarEtiqueta.setBounds(160, 137, 152, 24);
 		cboRenombrarEtiqueta.addActionListener(new ComboEditarEtiquetaListener());
 		
 		JLabel label_11 = new JLabel("Nuevo nombre");
 		label_11.setBounds(23, 178, 117, 15);
 		
 		txtNuevoNombre = new JTextField();
-		txtNuevoNombre.setBounds(160, 173, 154, 24);
+		txtNuevoNombre.setBounds(160, 173, 152, 24);
 		txtNuevoNombre.setColumns(10);
 		
 		JButton btnCrear = new JButton("Crear");
-		btnCrear.setBounds(326, 28, 154, 25);
+		btnCrear.setBounds(326, 28, 152, 25);
 		btnCrear.addActionListener(new BotonCrearEtiquetaListener());
 		
 		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(326, 65, 154, 25);
+		btnEliminar.setBounds(326, 65, 152, 25);
 		btnEliminar.addActionListener(new BotonEliminarEtiquetaListener());
 		
 		JButton btnAsignardesasig = new JButton("Asignar/Desasig.");
@@ -350,26 +367,22 @@ public class MonitorView extends JFrame {
 			             JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
 			    } else {
 			             DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			             String etiquetas = (String)modelo.getValueAt(filaseleccionada, 6);
-		            	 Integer id_notificacion = (Integer)modelo.getValueAt(filaseleccionada, 0);
-		            	 System.out.println(id_notificacion);
+			             String etiquetas = (String) modelo.getValueAt(filaseleccionada, 6);
+		            	 Integer id_notificacion = (Integer) modelo.getValueAt(filaseleccionada, 0);
 		            	 IEtiquetaDAO etiquetaDAO = FactoriaDAO.getEtiquetaDAO();
 			             if (!etiquetas.contains(etiqueta.getTexto())) {		         	 
 			            	 etiquetaDAO.asignarEtiqueta(id_notificacion, etiqueta.getId());
 			             } else {
 			            	 etiquetaDAO.desasignarEtiqueta(id_notificacion, etiqueta.getId());
 			             }
-			             modeloTabla.setRowCount(0);
-			             INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
-			             List<Notificacion> lista = notificacionDAO.listarNotificaciones();
-			             rellenarTabla(lista);
+			             btnFiltrar.doClick();
 			    }
 			}
 		});
-		btnAsignardesasig.setBounds(326, 101, 154, 25);
+		btnAsignardesasig.setBounds(326, 101, 152, 25);
 		
 		JButton btnRenombrar = new JButton("Renombrar");
-		btnRenombrar.setBounds(326, 172, 154, 25);
+		btnRenombrar.setBounds(326, 172, 152, 25);
 		btnRenombrar.addActionListener(new BotonEditarEtiquetaListener());
 		
 		panelEtiquetas.setLayout(null);
@@ -389,7 +402,7 @@ public class MonitorView extends JFrame {
 		panelEtiquetas.add(btnRenombrar);
 		
 		JPanel panelNotificaciones = new JPanel();
-		panelNotificaciones.setBounds(5, 290, 1057, 314);
+		panelNotificaciones.setBounds(5, 266, 1057, 338);
 		contentPane.add(panelNotificaciones);
 		panelNotificaciones.setBorder(new TitledBorder(null, "Notificaciones", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
@@ -406,8 +419,7 @@ public class MonitorView extends JFrame {
 			gl_panelNotificaciones.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelNotificaciones.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
 		);
 		
 		table = new JTable();
@@ -419,11 +431,11 @@ public class MonitorView extends JFrame {
 			}
 		);
 		table.setModel(modeloTabla);
+		
 		table.getColumnModel().getColumn(0).setMaxWidth(16);
-
 		table.getColumnModel().getColumn(0).setMinWidth(4);
-
 		table.getColumnModel().getColumn(0).setPreferredWidth(10);
+		
 		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
 		rellenarTabla(lista);
@@ -432,7 +444,7 @@ public class MonitorView extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
-//		
+		
 		inicializarComboBoxCategoria(cboCategoria);
 		inicializarComboBoxContenido(cboContenido);
 		inicializarComboBoxContexto(cboContexto);
@@ -442,6 +454,8 @@ public class MonitorView extends JFrame {
 		
 //		LecturaJSON lector = new LecturaJSON();
 //		lector.cargarNotificaciones("notificaciones.txt");
+		
+		txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{
@@ -492,6 +506,7 @@ public class MonitorView extends JFrame {
 				Etiqueta etiqueta = (Etiqueta) cboEliminarEtiqueta.getSelectedItem();
 				FactoriaDAO.getEtiquetaDAO().eliminarEtiqueta(etiqueta);
 				refrescarComboBoxEtiqueta();
+				txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
 			}	
 		}		
 	}

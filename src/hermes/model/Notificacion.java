@@ -92,11 +92,12 @@ public class Notificacion {
 	
 	public String getEtiquetasComoString() {
 		String etiquetasComoString = "";
-		if (etiquetas.size() > 1) {
-			for (Etiqueta e : etiquetas)
-				etiquetasComoString += e.getTexto() + ", ";
-		} else {
-			if (etiquetas.size() == 1) etiquetasComoString += this.etiquetas.get(0);
+		int i = 0;
+		if (etiquetas.size() >= 1) {
+			for (i=0; i<etiquetas.size()-1; i++) {
+				etiquetasComoString += etiquetas.get(i).getTexto() + ", ";
+			}		
+			etiquetasComoString += this.etiquetas.get(i);		
 		}
 		return etiquetasComoString;
 	}

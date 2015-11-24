@@ -91,12 +91,10 @@ public class NotificacionDAO implements INotificacionDAO {
 	    
 	    List<Etiqueta> lista = new ArrayList<Etiqueta>();
 	    
-	    String consulta = "SELECT notificacion.id, "
-	    		+ "notificacion_etiqueta.id_etiqueta, etiqueta.texto AS etiqueta "   
-				+ "FROM notificacion "
-				+ "INNER JOIN notificacion_etiqueta ON notificacion.id=notificacion_etiqueta.id_notificacion "
-				+ "INNER JOIN etiqueta ON notificacion_etiqueta.id_etiqueta=etiqueta.id "
-				+ "WHERE notificacion.id = " + id + ";";
+	    String consulta = "SELECT * "
+	    				+ "FROM notificacion_etiqueta "
+	    				+ "INNER JOIN etiqueta ON notificacion_etiqueta.id_etiqueta = etiqueta.id "
+	    				+ "WHERE notificacion_etiqueta.id_notificacion = " + id + "";
 
 	    rs = db.ejecutarConsulta(consulta);
 	    
@@ -104,7 +102,7 @@ public class NotificacionDAO implements INotificacionDAO {
 			while (rs.next()){
 
 				Etiqueta etiqueta = new Etiqueta(
-							rs.getInt("id"), rs.getString("etiqueta")
+							rs.getInt("id_notificacion"), rs.getString("texto")
 							);
 				lista.add(etiqueta);
 			}
