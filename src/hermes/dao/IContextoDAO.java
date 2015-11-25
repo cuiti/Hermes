@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IContextoDAO {
 	public List<Contexto> listarContextos();
+	public Contexto getContextoByNombre(String s);
 }

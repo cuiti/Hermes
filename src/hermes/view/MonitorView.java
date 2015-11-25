@@ -59,8 +59,9 @@ public class MonitorView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LecturaJSON lector = new LecturaJSON();
-					lector.cargarNotificaciones("notificaciones.txt");
+//					LecturaJSON lector = new LecturaJSON();
+//					lector.cargarNotificaciones("notificaciones.txt");
+					 
 					MonitorView frame = new MonitorView();
 					frame.setVisible(true);
 				} catch (Exception e) {
