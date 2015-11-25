@@ -36,4 +36,44 @@ public class NinoDAO implements INinoDAO {
 	    return lista;
 	}
 
+	@Override
+	public boolean guardarNino(Nino n) {
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO nino (id, nombre, apellido) "
+	    		+ "VALUES ("		
+	    		+ n.getId() + ","
+	    		+ n.getNombre() + ","
+	    		+ n.getApellido() + ","
+	    		+ ");";
+		return db.ejecutarABM(query);
+	}
+
+	@Override
+	public Nino getNinoByNombre(String nombre, String apellido) {
+		BaseDeDatos db = new BaseDeDatos();
+	    ResultSet rs = null;	    
+	    Nino nino = new Nino(-1, "", "");	
+	    
+		String consulta = "SELECT * FROM nino "
+						+ "WHERE nombre = "+ nombre +""
+						+ "AND apellido = "+ apellido + "";
+		
+	    rs = db.ejecutarConsulta(consulta);
+		
+	    try {
+			if (rs.next()){
+				nino = new Nino(
+						rs.getInt("id"),
+						rs.getString("nombre"),
+						rs.getString("apellido")
+				);
+			} 
+			
+		} catch (SQLException e) {
+			System.out.println("Error al acceder a la base de datos SQLite");
+			e.printStackTrace();
+		}
+	    return nino;
+	}
+
 }

@@ -65,4 +65,15 @@ public class CategoriaDAO implements ICategoriaDAO {
 	    return categoria;
 	}
 
+	@Override
+	public boolean guardarCategoria(Categoria c) {
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO categoria (id, texto) "
+	    		+ "VALUES ("		
+	    		+ c.getId() + ","
+	    		+ c.getTexto() + ","
+	    		+ ");";
+		return db.ejecutarABM(query);
+	}
+
 }

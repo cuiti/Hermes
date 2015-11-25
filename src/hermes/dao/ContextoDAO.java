@@ -59,4 +59,15 @@ public class ContextoDAO implements IContextoDAO {
 	    return contexto;
 	}
 
+	@Override
+	public boolean guardarContexto(Contexto c) {
+		BaseDeDatos db = new BaseDeDatos();
+	    String query = "INSERT INTO contexto (id, texto) "
+	    		+ "VALUES ("		
+	    		+ c.getId() + ","
+	    		+ c.getTexto() + ","
+	    		+ ");";
+		return db.ejecutarABM(query);
+	}
+
 }
