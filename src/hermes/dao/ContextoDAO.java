@@ -2,7 +2,6 @@ package hermes.dao;
 
 import hermes.db.BaseDeDatos;
 import hermes.model.Contexto;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -33,6 +32,31 @@ public class ContextoDAO implements IContextoDAO {
 			e.printStackTrace();
 		}
 	    return lista;
+	}
+	
+	public Contexto getContextoByNombre(String nombre) {
+		BaseDeDatos db = new BaseDeDatos();
+	    ResultSet rs = null;	    
+	    Contexto contexto = new Contexto(-1, "contexto inexistente");	
+	    
+		String consulta = "SELECT * FROM contexto "
+						+ "WHERE texto = "+ nombre +"";
+		
+	    rs = db.ejecutarConsulta(consulta);
+		
+	    try {
+			if (rs.next()){
+				contexto = new Contexto(
+						rs.getInt("id"),
+						rs.getString("texto")
+				);
+			} 
+			
+		} catch (SQLException e) {
+			System.out.println("Error al acceder a la base de datos SQLite");
+			e.printStackTrace();
+		}
+	    return contexto;
 	}
 
 }

@@ -39,5 +39,30 @@ public class CategoriaDAO implements ICategoriaDAO {
 		}
 	    return lista;
 	}
+	
+	public Categoria getCategoriaByNombre(String nombre) {
+		BaseDeDatos db = new BaseDeDatos();
+	    ResultSet rs = null;	    
+	    Categoria categoria = new Categoria(-1, "categoria inexistente");	
+	    
+		String consulta = "SELECT * FROM categoria "
+						+ "WHERE texto = "+ nombre +"";
+		
+	    rs = db.ejecutarConsulta(consulta);
+		
+	    try {
+			if (rs.next()){
+				categoria = new Categoria(
+						rs.getInt("id"),
+						rs.getString("texto")
+				);
+			} 
+			
+		} catch (SQLException e) {
+			System.out.println("Error al acceder a la base de datos SQLite");
+			e.printStackTrace();
+		}
+	    return categoria;
+	}
 
 }
