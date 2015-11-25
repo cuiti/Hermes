@@ -39,9 +39,8 @@ public class NinoDAO implements INinoDAO {
 	@Override
 	public boolean guardarNino(Nino n) {
 		BaseDeDatos db = new BaseDeDatos();
-	    String query = "INSERT INTO nino (id, nombre, apellido) "
+	    String query = "INSERT INTO nino ( nombre, apellido) "
 	    		+ "VALUES ("		
-	    		+ n.getId() + ","
 	    		+ n.getNombre() + ","
 	    		+ n.getApellido() + ","
 	    		+ ");";

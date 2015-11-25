@@ -38,9 +38,8 @@ public class ContenidoDAO implements IContenidoDAO {
 	@Override
 	public boolean guardarContenido(Contenido c) {
 		BaseDeDatos db = new BaseDeDatos();
-	    String query = "INSERT INTO contenido (id, texto) "
-	    		+ "VALUES ("		
-	    		+ c.getId() + ","
+	    String query = "INSERT INTO contenido (texto) "
+	    		+ "VALUES ("
 	    		+ c.getTexto() + ","
 	    		+ ");";
 		return db.ejecutarABM(query);
