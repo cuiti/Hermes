@@ -5,10 +5,13 @@ import java.net.*;
 import com.sun.net.httpserver.HttpServer;
 import java.util.concurrent.Executors;
 
-public class MonitorServer {
+public class MonitorServer extends Thread {
 
 	public MonitorServer() {
-		
+		super("thread-servidor");
+	}
+	
+	public void run(){
 		HttpServer server;
 		try {
 			server = HttpServer.create(new InetSocketAddress(8000),0);	

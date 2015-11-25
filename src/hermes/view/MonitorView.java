@@ -2,6 +2,7 @@ package hermes.view;
 
 import hermes.dao.*;
 import hermes.db.LecturaJSON;
+import hermes.http.MonitorServer;
 import hermes.model.*;
 
 import java.util.Date;
@@ -61,7 +62,9 @@ public class MonitorView extends JFrame {
 				try {
 //					LecturaJSON lector = new LecturaJSON();
 //					lector.cargarNotificaciones("notificaciones.txt");
-					 
+					MonitorServer servidor = new MonitorServer();
+					servidor.run();
+					
 					MonitorView frame = new MonitorView();
 					frame.setVisible(true);
 				} catch (Exception e) {
