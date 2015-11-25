@@ -16,7 +16,7 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 	    List<Etiqueta> lista = new LinkedList<Etiqueta>();
 	    
 	    String consulta = "SELECT * FROM etiqueta";
-	    
+	    db.open();
 	    resultados = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -32,52 +32,70 @@ public class EtiquetaDAO implements IEtiquetaDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 
 	@Override
 	public boolean guardarEtiqueta(Etiqueta etiqueta) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "INSERT INTO etiqueta (texto) "
 	    		+ "VALUES ('"		
 	    		+ etiqueta.getTexto()
 	    		+ "');";
-		return db.ejecutarABM(query);
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 	@Override
 	public boolean eliminarEtiqueta(Etiqueta etiqueta) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "DELETE FROM etiqueta WHERE id = "		
 	    		+ etiqueta.getId()
 	    		+";";
-		return db.ejecutarABM(query);
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 	@Override
 	public boolean renombrarEtiqueta(Etiqueta etiqueta, Etiqueta nuevaEtiqueta) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "UPDATE etiqueta SET texto = '"		
 	    		+ nuevaEtiqueta.getTexto()+ "' "
 	    		+ "WHERE id = "
 	    		+ etiqueta.getId()+";";
-		return db.ejecutarABM(query);
-	}
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;	}
 
 	@Override
 	public boolean asignarEtiqueta(int id_notificacion, int id_etiqueta) {		
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "INSERT INTO notificacion_etiqueta (id_notificacion, id_etiqueta) "
 	    		+ "VALUES ("+id_notificacion + "," + id_etiqueta + ");";
-		return db.ejecutarABM(query);
-	}
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;	}
 
 	@Override
 	public boolean desasignarEtiqueta(int id_notificacion, int id_etiqueta) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "DELETE FROM notificacion_etiqueta "
 	    		+ "WHERE id_notificacion = "+ id_notificacion +" AND id_etiqueta = "+ id_etiqueta +";";
-		return db.ejecutarABM(query);
-	}
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;	}
 
 }

@@ -17,7 +17,7 @@ public class ContenidoDAO implements IContenidoDAO {
 	    List<Contenido> lista = new LinkedList<Contenido>();
 	    
 	    String consulta = "SELECT * FROM contenido";	    
-	   
+	    db.open();
 	    rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -32,17 +32,22 @@ public class ContenidoDAO implements IContenidoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 
 	@Override
 	public boolean guardarContenido(Contenido c) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "INSERT INTO contenido (texto) "
-	    		+ "VALUES ("
-	    		+ c.getTexto() + ","
+	    		+ "VALUES ('"
+	    		+ c.getTexto() + "'"
 	    		+ ");";
-		return db.ejecutarABM(query);
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class ContenidoDAO implements IContenidoDAO {
 	    Contenido contenido = new Contenido(-1, "contenido inexistente");	
 	    
 		String consulta = "SELECT * FROM contenido "
-						+ "WHERE texto = "+ nombre +"";
+						+ "WHERE texto = '"+ nombre +"'";
 		
 	    rs = db.ejecutarConsulta(consulta);
 		

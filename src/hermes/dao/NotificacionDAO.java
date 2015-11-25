@@ -31,6 +31,7 @@ public class NotificacionDAO implements INotificacionDAO {
 					+ "INNER JOIN contenido ON notificacion.id_contenido=contenido.id "
 					+ "INNER JOIN nino ON notificacion.id_nino=nino.id ";
 		
+	    db.open();
 		rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -65,6 +66,8 @@ public class NotificacionDAO implements INotificacionDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    
+	    db.close();
 	    return lista;
 	}
 
@@ -95,7 +98,7 @@ public class NotificacionDAO implements INotificacionDAO {
 	    				+ "FROM notificacion_etiqueta "
 	    				+ "INNER JOIN etiqueta ON notificacion_etiqueta.id_etiqueta = etiqueta.id "
 	    				+ "WHERE notificacion_etiqueta.id_notificacion = " + id + "";
-
+	    db.open();
 	    rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -110,6 +113,7 @@ public class NotificacionDAO implements INotificacionDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 

@@ -3,8 +3,31 @@ package hermes.db;
 import java.sql.*;
 
 public class BaseDeDatos {
+	
+	private Statement stmt = null;
+	private Connection conexion = null;
 
 	public BaseDeDatos() {
+	}
+	
+	public void open()  {
+		conexion = this.getConnection();
+		try {
+			stmt = conexion.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void close()  {
+		try {
+			stmt.close();
+			conexion.close();	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public Connection getConnection(){
@@ -28,16 +51,8 @@ public class BaseDeDatos {
 	 * @return un ResultSet con todos los resultados
 	 */
 	public ResultSet ejecutarConsulta(String consulta){
-		Connection conexion = this.getConnection();
-		Statement stmt=null;
 		ResultSet resultados=null;
 		
-		try {
-			stmt = conexion.createStatement();
-		} catch (SQLException e) {
-			System.out.println("Error al crear el statement");
-			e.printStackTrace();
-		}
 			
 		try {
 			resultados = stmt.executeQuery(consulta);
@@ -56,15 +71,9 @@ public class BaseDeDatos {
 	 * @param query es la consulta de insercion, eliminacion o update en SQL literal
 	 */
 	public boolean ejecutarABM(String query){
-		Connection conexion = this.getConnection();
-	    Statement stmt = null;
 	    
 	    try {
-	      stmt = conexion.createStatement();
 	      stmt.executeUpdate(query);
-	      stmt.close();
-	      // conexion.commit();		// java.sql.SQLException: database in auto-commit mode 
-	      conexion.close();
 	      return true;
 	    } catch ( Exception e ) {
 	    	System.out.println(query);

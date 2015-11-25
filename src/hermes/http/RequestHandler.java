@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.*;
 
 import hermes.anotaciones.NotificacionDTO;
@@ -31,51 +32,62 @@ public class RequestHandler implements HttpHandler{
 		
 		Notificacion nuevaNotificacion;
 		
+		System.out.println("entro al handler");
 		InputStream is = http.getRequestBody();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String json = br.readLine();
-
+		//br.close();
 		
-		NotificacionDTO notiDTO = gson.fromJson(json, NotificacionDTO.class);
+		is.close();
 		
-		Contexto contexto = contextoDAO.getContextoByNombre(notiDTO.getContexto());
-		if (contexto.getId() == -1){
-			Contexto nuevoContexto = new Contexto(0,contexto.getTexto());
-			contextoDAO.guardarContexto(nuevoContexto);
-			contexto = nuevoContexto;
+		List<NotificacionDTO> listaNotiDTO = gson.fromJson(json,new TypeToken<List<NotificacionDTO>>(){}.getType());
+		
+		for (NotificacionDTO notiDTO : listaNotiDTO) {
+		
+			Contexto contexto = contextoDAO.getContextoByNombre(notiDTO.getContexto());
+			if (contexto.getId() == -1){
+				Contexto nuevoContexto = new Contexto(0,notiDTO.getContexto());
+				contextoDAO.guardarContexto(nuevoContexto);
+				contexto = nuevoContexto;
+			}
+			
+			Categoria categoria = categoriaDAO.getCategoriaByNombre(notiDTO.getCategoria());
+			if (categoria.getId()==-1){
+				Categoria nuevaCategoria = new Categoria(0,notiDTO.getCategoria());
+				categoriaDAO.guardarCategoria(nuevaCategoria);
+				categoria = nuevaCategoria;
+			}
+			
+			Nino nino = ninoDAO.getNinoByNombre(notiDTO.getNombre(), notiDTO.getApellido());
+			if (nino.getId()==-1){
+				Nino nuevoNino = new Nino(0,notiDTO.getNombre(),notiDTO.getApellido());
+				ninoDAO.guardarNino(nuevoNino);
+				nino = nuevoNino;
+			}
+			
+			Contenido contenido = contenidoDAO.getContenidoByNombre(notiDTO.getContenido());
+			if (contenido.getId() == -1){
+				Contenido nuevoContenido = new Contenido(0,notiDTO.getContenido());
+				contenidoDAO.guardarContenido(nuevoContenido);
+				contenido = nuevoContenido;
+			}
+			
+			List<Etiqueta> etiquetas = new ArrayList<Etiqueta>(); //las notificaciones nuevas empiezan con una lista vacia de etiquetas
+			
+			
+			nuevaNotificacion = new Notificacion(0, categoria, contenido, contexto, nino, new Date(notiDTO.getFecha_envio()), new Date(), etiquetas);
+			System.out.println(gson.toJson(nuevaNotificacion));
+			notiDAO.guardarNotificacion(nuevaNotificacion);
 		}
-		
-		Categoria categoria = categoriaDAO.getCategoriaByNombre(notiDTO.getCategoria());
-		if (categoria.getId()==-1){
-			Categoria nuevaCategoria = new Categoria(0,categoria.getTexto());
-			categoriaDAO.guardarCategoria(nuevaCategoria);
-			categoria = nuevaCategoria;
-		}
-		
-		Nino nino = ninoDAO.getNinoByNombre(notiDTO.getNombre(), notiDTO.getApellido());
-		if (nino.getId()==-1){
-			Nino nuevoNino = new Nino(0,nino.getNombre(),nino.getApellido());
-			ninoDAO.guardarNino(nuevoNino);
-			nino = nuevoNino;
-		}
-		
-		Contenido contenido = contenidoDAO.getContenidoByNombre(notiDTO.getContenido());
-		if (contenido.getId() == -1){
-			Contenido nuevoContenido = new Contenido(0,contenido.getTexto());
-			contenidoDAO.guardarContenido(nuevoContenido);
-			contenido = nuevoContenido;
-		}
-		
-		List<Etiqueta> etiquetas = new ArrayList<Etiqueta>(); //las notificaciones nuevas empiezan con una lista vacia de etiquetas
-		
-		nuevaNotificacion = new Notificacion(0, categoria, contenido, contexto, nino, new Date(notiDTO.getFecha_envio()), new Date(), etiquetas);
-		notiDAO.guardarNotificacion(nuevaNotificacion);
 		
 		String response = "Esta es la respuesta";
+		
 		http.sendResponseHeaders(200, response.length());
 		OutputStream os = http.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
+		
+
 	}
 
 }

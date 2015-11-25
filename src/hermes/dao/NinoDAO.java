@@ -17,7 +17,7 @@ public class NinoDAO implements INinoDAO {
 	    List<Nino> lista = new LinkedList<Nino>();
 	    
 		String consulta = "SELECT * FROM nino";
-		
+		db.open();
 		rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -33,18 +33,23 @@ public class NinoDAO implements INinoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 
 	@Override
 	public boolean guardarNino(Nino n) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
-	    String query = "INSERT INTO nino ( nombre, apellido) "
-	    		+ "VALUES ("		
-	    		+ n.getNombre() + ","
-	    		+ n.getApellido() + ","
+	    String query = "INSERT INTO nino (nombre,apellido) "
+	    		+ "VALUES ('"		
+	    		+ n.getNombre() + "','"
+	    		+ n.getApellido() + "'"
 	    		+ ");";
-		return db.ejecutarABM(query);
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 	@Override
@@ -54,8 +59,8 @@ public class NinoDAO implements INinoDAO {
 	    Nino nino = new Nino(-1, "", "");	
 	    
 		String consulta = "SELECT * FROM nino "
-						+ "WHERE nombre = "+ nombre +""
-						+ "AND apellido = "+ apellido + "";
+						+ "WHERE nombre = '"+ nombre +"'"
+						+ "AND apellido = '"+ apellido + "'";
 		
 	    rs = db.ejecutarConsulta(consulta);
 		

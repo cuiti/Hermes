@@ -20,14 +20,18 @@ public class Testeador {
 		
 		OutputStream os = null;
 		
-		
+		HttpURLConnection conn=null;
+
 		try {
 			URL urlObject = new URL(url);
-			HttpURLConnection conn;
 			conn = (HttpURLConnection) urlObject.openConnection();
-			conn.setReadTimeout(10000);
 			
+				
+			conn.setReadTimeout(100000);
+			conn.setDoOutput(true);
 			os = conn.getOutputStream();
+			
+			
 			
 		} catch (IOException e1) {
 			System.out.println("Error de IO en el testeador");
@@ -41,18 +45,34 @@ public class Testeador {
 			
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
 			
-			for (NotificacionDTO n: lista) {
-				System.out.println(n.getNombre()+" "+n.getApellido()+" "+n.getFecha_envio());
-				
-				String notiJson = gson.toJson(n);
-				System.out.println(notiJson);
-				writer.write(notiJson);
-			}
+//			for (NotificacionDTO n: lista) {
+//				System.out.println(n.getNombre()+" "+n.getApellido()+" "+n.getFecha_envio());
+//			}
+			
+			String notiJson = gson.toJson(lista);
+			System.out.println(notiJson);
+			writer.write(notiJson);
+			
+			
+			writer.close();
+			os.close();
+			int code = conn.getResponseCode();
+			System.out.println("code:"+code);
+			//writer.flush();
+			//BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			//String inputLine;
+			//while ((inputLine = in.readLine()) != null) {
+			//	System.out.println(inputLine);
+			//}
+			//in.close();
+			//System.out.println(conn.getResponseMessage());
+
 			
 		} catch (Exception e) {
 			System.out.println("Error en el Testeador");
 			e.printStackTrace();
 		}
+
 	}
 
 }

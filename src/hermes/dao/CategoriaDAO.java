@@ -23,6 +23,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	    
 		String consulta = "SELECT * FROM categoria";
 		
+		db.open();
 	    rs = db.ejecutarConsulta(consulta);
 		
 	    try {
@@ -37,6 +38,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 	
@@ -46,7 +48,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	    Categoria categoria = new Categoria(-1, "categoria inexistente");	
 	    
 		String consulta = "SELECT * FROM categoria "
-						+ "WHERE texto = "+ nombre +"";
+						+ "WHERE texto = '"+ nombre +"'";
 		
 	    rs = db.ejecutarConsulta(consulta);
 		
@@ -67,12 +69,16 @@ public class CategoriaDAO implements ICategoriaDAO {
 
 	@Override
 	public boolean guardarCategoria(Categoria c) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "INSERT INTO categoria ( texto) "
-	    		+ "VALUES ("		
+	    		+ "VALUES ('"		
 	    		+ c.getTexto()
-	    		+ ");";
-		return db.ejecutarABM(query);
+	    		+ "');";
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 }

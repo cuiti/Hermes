@@ -16,7 +16,7 @@ public class ContextoDAO implements IContextoDAO {
 	    List<Contexto> lista = new LinkedList<Contexto>();
 	    
 		String consulta = "SELECT * FROM contexto";
-		
+		db.open();
 		rs = db.ejecutarConsulta(consulta);
 	    
 	    try {
@@ -31,6 +31,7 @@ public class ContextoDAO implements IContextoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return lista;
 	}
 	
@@ -40,8 +41,8 @@ public class ContextoDAO implements IContextoDAO {
 	    Contexto contexto = new Contexto(-1, "contexto inexistente");	
 	    
 		String consulta = "SELECT * FROM contexto "
-						+ "WHERE texto = "+ nombre +"";
-		
+						+ "WHERE texto = '"+ nombre +"'";
+		db.open();
 	    rs = db.ejecutarConsulta(consulta);
 		
 	    try {
@@ -56,17 +57,22 @@ public class ContextoDAO implements IContextoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return contexto;
 	}
 
 	@Override
 	public boolean guardarContexto(Contexto c) {
+		boolean resul;
 		BaseDeDatos db = new BaseDeDatos();
 	    String query = "INSERT INTO contexto (texto) "
-	    		+ "VALUES ("		
-	    		+ c.getTexto() + ","
-	    		+ ");";
-		return db.ejecutarABM(query);
+	    		+ "VALUES ('"		
+	    		+ c.getTexto()
+	    		+ "');";
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 }
