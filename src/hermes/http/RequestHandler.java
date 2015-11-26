@@ -50,20 +50,23 @@ public class RequestHandler implements HttpHandler{
 				contextoDAO.guardarContexto(nuevoContexto);
 				contexto = nuevoContexto;
 			}
+			System.out.println(contexto.getTexto());
 			
 			Categoria categoria = categoriaDAO.getCategoriaByNombre(notiDTO.getCategoria());
-			if (categoria.getId()==-1){
+			if (categoria.getId() == -1){
 				Categoria nuevaCategoria = new Categoria(0,notiDTO.getCategoria());
 				categoriaDAO.guardarCategoria(nuevaCategoria);
 				categoria = nuevaCategoria;
 			}
+			System.out.println(categoria.getTexto());
 			
 			Nino nino = ninoDAO.getNinoByNombre(notiDTO.getNombre(), notiDTO.getApellido());
-			if (nino.getId()==-1){
+			if (nino.getId() == -1){
 				Nino nuevoNino = new Nino(0,notiDTO.getNombre(),notiDTO.getApellido());
 				ninoDAO.guardarNino(nuevoNino);
 				nino = nuevoNino;
 			}
+			System.out.println(nino.getNombre());
 			
 			Contenido contenido = contenidoDAO.getContenidoByNombre(notiDTO.getContenido());
 			if (contenido.getId() == -1){
@@ -71,6 +74,7 @@ public class RequestHandler implements HttpHandler{
 				contenidoDAO.guardarContenido(nuevoContenido);
 				contenido = nuevoContenido;
 			}
+			System.out.println(contenido.getTexto());
 			
 			List<Etiqueta> etiquetas = new ArrayList<Etiqueta>(); //las notificaciones nuevas empiezan con una lista vacia de etiquetas
 			

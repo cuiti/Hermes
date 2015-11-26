@@ -61,7 +61,7 @@ public class NinoDAO implements INinoDAO {
 		String consulta = "SELECT * FROM nino "
 						+ "WHERE nombre = '"+ nombre +"'"
 						+ "AND apellido = '"+ apellido + "'";
-		
+		db.open();
 	    rs = db.ejecutarConsulta(consulta);
 		
 	    try {
@@ -77,6 +77,7 @@ public class NinoDAO implements INinoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return nino;
 	}
 

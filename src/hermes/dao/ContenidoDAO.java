@@ -58,7 +58,7 @@ public class ContenidoDAO implements IContenidoDAO {
 	    
 		String consulta = "SELECT * FROM contenido "
 						+ "WHERE texto = '"+ nombre +"'";
-		
+		db.open();
 	    rs = db.ejecutarConsulta(consulta);
 		
 	    try {
@@ -73,6 +73,7 @@ public class ContenidoDAO implements IContenidoDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return contenido;
 	}
 

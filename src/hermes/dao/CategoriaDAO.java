@@ -49,7 +49,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	    
 		String consulta = "SELECT * FROM categoria "
 						+ "WHERE texto = '"+ nombre +"'";
-		
+		db.open();
 	    rs = db.ejecutarConsulta(consulta);
 		
 	    try {
@@ -64,6 +64,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 			System.out.println("Error al acceder a la base de datos SQLite");
 			e.printStackTrace();
 		}
+	    db.close();
 	    return categoria;
 	}
 
