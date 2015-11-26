@@ -45,9 +45,10 @@ public class Testeador {
 			
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
 			
-//			for (NotificacionDTO n: lista) {
-//				System.out.println(n.getNombre()+" "+n.getApellido()+" "+n.getFecha_envio());
-//			}
+			System.out.println("Notificaciones generadas:");
+			for (NotificacionDTO n: lista) {
+				System.out.println(n.getNombre()+" "+n.getApellido()+" - "+n.getCategoria()+" - "+n.getContexto());
+			}
 			
 			String notiJson = gson.toJson(lista);
 			System.out.println(notiJson);
