@@ -73,18 +73,24 @@ public class NotificacionDAO implements INotificacionDAO {
 
 	@Override
 	public boolean guardarNotificacion(Notificacion n) {
+		boolean resul;
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		BaseDeDatos db = new BaseDeDatos();
+		System.out.println("Entrando a insertar "+n.getContenido().getTexto());
 	    String query = "INSERT INTO notificacion (id_contenido, id_contexto, id_categoria, fecha_envio, fecha_recepcion, id_nino) "
 	    		+ "VALUES ("		
 	    		+ n.getContenido().getId() + ","
 	    		+ n.getContexto().getId() + ","
 	    		+ n.getCategoria().getId() + ",'"
-	    		+ formatter.format(n.getFecha_envio().toString()) + "','"
-	    		+ formatter.format(n.getFecha_recepcion()) + "',"
+	    		+ formatter.format(n.getFecha_envio()).toString() + "','"
+	    		+ formatter.format(n.getFecha_recepcion()).toString() + "',"
 	    		+ n.getNino().getId()
 	    		+ ");";
-		return db.ejecutarABM(query);
+	    System.out.println(query);
+	    db.open();
+		resul = db.ejecutarABM(query);
+		db.close();
+		return resul;
 	}
 
 	@Override

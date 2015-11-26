@@ -13,6 +13,7 @@ import com.sun.net.httpserver.*;
 import hermes.anotaciones.NotificacionDTO;
 import hermes.dao.*;
 import hermes.model.*;
+import hermes.view.MonitorView;
 
 public class RequestHandler implements HttpHandler{
 
@@ -48,7 +49,7 @@ public class RequestHandler implements HttpHandler{
 			if (contexto.getId() == -1){
 				Contexto nuevoContexto = new Contexto(0,notiDTO.getContexto());
 				contextoDAO.guardarContexto(nuevoContexto);
-				contexto = nuevoContexto;
+				contexto = contextoDAO.getContextoByNombre(notiDTO.getContexto());
 			}
 			System.out.println(contexto.getTexto());
 			
@@ -56,7 +57,7 @@ public class RequestHandler implements HttpHandler{
 			if (categoria.getId() == -1){
 				Categoria nuevaCategoria = new Categoria(0,notiDTO.getCategoria());
 				categoriaDAO.guardarCategoria(nuevaCategoria);
-				categoria = nuevaCategoria;
+				categoria = categoriaDAO.getCategoriaByNombre(notiDTO.getCategoria());
 			}
 			System.out.println(categoria.getTexto());
 			
@@ -64,7 +65,7 @@ public class RequestHandler implements HttpHandler{
 			if (nino.getId() == -1){
 				Nino nuevoNino = new Nino(0,notiDTO.getNombre(),notiDTO.getApellido());
 				ninoDAO.guardarNino(nuevoNino);
-				nino = nuevoNino;
+				nino = ninoDAO.getNinoByNombre(notiDTO.getNombre(), notiDTO.getApellido());
 			}
 			System.out.println(nino.getNombre());
 			
@@ -72,16 +73,21 @@ public class RequestHandler implements HttpHandler{
 			if (contenido.getId() == -1){
 				Contenido nuevoContenido = new Contenido(0,notiDTO.getContenido());
 				contenidoDAO.guardarContenido(nuevoContenido);
-				contenido = nuevoContenido;
+				
+				contenido = contenidoDAO.getContenidoByNombre(notiDTO.getContenido());
 			}
 			System.out.println(contenido.getTexto());
 			
 			List<Etiqueta> etiquetas = new ArrayList<Etiqueta>(); //las notificaciones nuevas empiezan con una lista vacia de etiquetas
 			
 			
-			nuevaNotificacion = new Notificacion(0, categoria, contenido, contexto, nino, new Date(notiDTO.getFecha_envio()), new Date(), etiquetas);
+			nuevaNotificacion = new Notificacion(0, categoria, contenido, contexto, nino, new Date(), new Date(), etiquetas);
+			System.out.println("nueva noti: " + nuevaNotificacion.getContenido().getTexto());
+
 			System.out.println(gson.toJson(nuevaNotificacion));
+			
 			notiDAO.guardarNotificacion(nuevaNotificacion);
+			MonitorView.actualizarVista();
 		}
 		
 		String response = "Esta es la respuesta";

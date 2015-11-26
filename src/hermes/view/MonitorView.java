@@ -41,7 +41,8 @@ public class MonitorView extends JFrame {
 	private JComboBox<Etiqueta> cboEliminarEtiqueta;
 	private JComboBox<Etiqueta> cboAsignarEtiqueta;
 	private DefaultTableModel modeloTabla;
-	JButton btnFiltrar;
+	private JButton btnFiltrar;
+	private static JLabel lblNotificaciones;
 	
 	private  JDateChooser dcFechaDesde=new JDateChooser();
 	private JDateChooser dcFechaHasta=new JDateChooser();
@@ -72,6 +73,10 @@ public class MonitorView extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public static void actualizarVista() {
+		lblNotificaciones.setText("Hay nuevas notificaciones");
 	}
 	
 	public void inicializarComboBoxCategoria(JComboBox<Categoria> combo) {
@@ -189,7 +194,7 @@ public class MonitorView extends JFrame {
 	public MonitorView() {
 		setTitle("Hermes Monitor");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1085, 654);
+		setBounds(100, 100, 1085, 704);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane); 
@@ -307,6 +312,7 @@ public class MonitorView extends JFrame {
 	            INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 	            List<Notificacion> lista = notificacionDAO.listarNotificaciones();
 	            rellenarTabla(lista);
+	            lblNotificaciones.setVisible(false);
 			}
 		});
 		btnMostrarTodo.setBounds(383, 220, 152, 25);
@@ -406,7 +412,7 @@ public class MonitorView extends JFrame {
 		panelEtiquetas.add(btnRenombrar);
 		
 		JPanel panelNotificaciones = new JPanel();
-		panelNotificaciones.setBounds(5, 266, 1057, 338);
+		panelNotificaciones.setBounds(5, 307, 1057, 297);
 		contentPane.add(panelNotificaciones);
 		panelNotificaciones.setBorder(new TitledBorder(null, "Notificaciones", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
@@ -460,6 +466,10 @@ public class MonitorView extends JFrame {
 //		lector.cargarNotificaciones("notificaciones.txt");
 		
 		txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
+		
+		lblNotificaciones = new JLabel("");
+		lblNotificaciones.setBounds(15, 272, 198, 24);
+		contentPane.add(lblNotificaciones);
 	}
 
 	private class BotonCrearEtiquetaListener implements ActionListener{
