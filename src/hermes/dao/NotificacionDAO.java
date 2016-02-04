@@ -148,12 +148,14 @@ public class NotificacionDAO implements INotificacionDAO {
 		
 		boolean encontre = false;
 		
-		for (Notificacion n: notificaciones){
-			for (Etiqueta e: n.getEtiquetas()) 
+		for (Notificacion n: notificaciones){	
+			for (Etiqueta e: n.getEtiquetas()){
 				if (e.equals(etiqueta))
 					encontre = true;
+			}
 			if (encontre){
 				lista.add(n);
+				encontre = false;
 			}
 		}
 		

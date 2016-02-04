@@ -58,8 +58,8 @@ public class Etiqueta {
 		if (getClass() != obj.getClass())
 			return false;
 		Etiqueta other = (Etiqueta) obj;
-		if (id != other.id)
-			return false;
+//		if (id != other.id)
+//			return false;
 		if (texto == null) {
 			if (other.texto != null)
 				return false;
