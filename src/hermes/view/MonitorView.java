@@ -442,16 +442,14 @@ public class MonitorView extends JFrame {
 		);
 		table.setModel(modeloTabla);
 		
-		table.getColumnModel().getColumn(0).setMaxWidth(16);
-		table.getColumnModel().getColumn(0).setMinWidth(4);
-		table.getColumnModel().getColumn(0).setPreferredWidth(10);
+		table.getColumnModel().getColumn(0).setMaxWidth(46);
+		table.getColumnModel().getColumn(0).setPreferredWidth(23);
 		
 		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
 		rellenarTabla(lista);
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(modeloTabla);
 		table.setRowSorter(sorter);
-		table.getColumnModel().getColumn(0).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		panelNotificaciones.setLayout(gl_panelNotificaciones);
 		
