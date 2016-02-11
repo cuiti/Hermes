@@ -32,17 +32,15 @@ public class RequestHandler implements HttpHandler{
 		INotificacionDAO notiDAO = FactoriaDAO.getNotificacionDAO();
 		
 		Notificacion nuevaNotificacion;
-		
 		System.out.println("entro al handler");
 		InputStream is = http.getRequestBody();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String json = br.readLine();
-		//br.close();
+		//System.out.println(json);
 		
 		is.close();
 		
 		List<NotificacionDTO> listaNotiDTO = gson.fromJson(json,new TypeToken<List<NotificacionDTO>>(){}.getType());
-		
 		for (NotificacionDTO notiDTO : listaNotiDTO) {
 		
 			Contexto contexto = contextoDAO.getContextoByNombre(notiDTO.getContexto());

@@ -76,7 +76,8 @@ public class MonitorView extends JFrame {
 	}
 	
 	public static void actualizarVista() {
-		lblNotificaciones.setText("Hay nuevas notificaciones");
+		lblNotificaciones.setText("Hay nuevas notificaciones, presione Mostrar Todo para verlas");
+		lblNotificaciones.setVisible(true);
 	}
 	
 	public void inicializarComboBoxCategoria(JComboBox<Categoria> combo) {
@@ -466,7 +467,8 @@ public class MonitorView extends JFrame {
 		txtNuevoNombre.setText(cboRenombrarEtiqueta.getSelectedItem().toString());
 		
 		lblNotificaciones = new JLabel("");
-		lblNotificaciones.setBounds(15, 272, 198, 24);
+		lblNotificaciones.setForeground(Color.RED);
+		lblNotificaciones.setBounds(15, 272, 439, 24);
 		contentPane.add(lblNotificaciones);
 	}
 
