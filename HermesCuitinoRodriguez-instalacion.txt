@@ -1,0 +1,10 @@
+Para el Monitor no es necesario instalar, se abre directamente el programa desarrollado en Java, "hermes-monitor.jar"
+
+Conviene abrir siempre el Monitor antes de usar la versión de Android, para que lleguen las notificaciones a medida que se generan.
+
+Para instalar Hermes en Android, se incluye el archivo "hermes.apk". Se debe tener habilitada la opción de instalación desde "orígenes desconocidos" en el dispositivo.
+
+
+
+
+Por otro lado, se incluye el código fuente de ambos proyectos. El de el Monitor en el proyecto Eclipse, y el de Android en el proyecto de Android Studio
