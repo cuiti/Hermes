@@ -444,7 +444,9 @@ public class MonitorView extends JFrame {
 		table.setModel(modeloTabla);
 		
 		table.getColumnModel().getColumn(0).setMaxWidth(46);
-		table.getColumnModel().getColumn(0).setPreferredWidth(23);
+		table.getColumnModel().getColumn(0).setPreferredWidth(29);
+		
+		table.getColumnModel().getColumn(3).setPreferredWidth(28);
 		
 		INotificacionDAO notificacionDAO = FactoriaDAO.getNotificacionDAO();
 		List<Notificacion> lista = notificacionDAO.listarNotificaciones();
