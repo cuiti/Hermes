@@ -5,6 +5,7 @@ import hermes.db.LecturaJSON;
 import hermes.http.MonitorServer;
 import hermes.model.*;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -227,7 +228,12 @@ public class MonitorView extends JFrame {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		dcFechaHasta.setDate(new Date());
+		                        
+	    Calendar c = Calendar.getInstance();        
+	    c.add(Calendar.DATE, 1);  
+	    Date tomorrow = c.getTime();
+
+		dcFechaHasta.setDate(tomorrow);
 		
 		panelFiltros.add(dcFechaDesde);
 		panelFiltros.add(dcFechaHasta);
